@@ -1,0 +1,2 @@
+
+<?php echo $__env->make('template.admin', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /Users/edoardo/PhpstormProjects/bibliotecaLaravel/resources/views/admin/prestiti.blade.php ENDPATH**/ ?>

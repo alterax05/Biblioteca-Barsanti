@@ -1,0 +1,36 @@
+<?php
+
+return [
+
+    'back' => 'Torna indietro',
+    'of' => 'di',
+    'generi' => 'Categorie',
+    'phone' => 'Vedi la pagina dal telefono',
+    'book' => 'Prenota una copia',
+    'description' => 'Descrizione',
+    'pages' => 'Pagine',
+    'language' => 'Lingua',
+    'physics' => 'Dimensioni fisiche',
+    'code_book' => 'Codice inventario',
+    'place' => 'Collocazione',
+    'loans' => 'Volte prestato',
+    'conditions' => 'Condizioni',
+    'availability' => 'Disponibile',
+    'provvisorio' => 'Provvisorio',
+    'scaffale' => 'SCAFFALE',
+    'ripiano' => 'RIPIANO',
+    'scaffale_down' => 'Scaffale',
+    'ripiano_down' => 'Ripiano',
+    'times' => 'volte',
+    'borrowed' => 'Preso in prestito',
+    'available' => 'Disponibile',
+    'show_all' => 'Premi per vedere i suoi titoli e biografia ',
+    'discover' => 'Scopri',
+    'notifiche' => 'Notifiche',
+    'recensione_success' => 'Recensione salvata con successo!',
+    'copy_book' => 'Prenota una copia',
+    'inventory_code' => 'Codice inventario della copia',
+    'ritira' => 'Perfavore, dopo la prenotazione, vai al più presto a ritirare la copia.',
+    'close' => 'Chiudi',
+    'book_button' => 'Prenota'
+    ];

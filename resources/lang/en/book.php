@@ -1,0 +1,36 @@
+<?php
+
+return [
+
+    'back' => 'Turn back',
+    'of' => 'of',
+    'generi' => 'Categories',
+    'phone' => 'View this page on the phone',
+    'book' => 'Book a copy',
+    'description' => 'Description',
+    'pages' => 'Pages',
+    'language' => 'Language',
+    'physics' => 'Physical dimensions',
+    'code_book' => 'Code inventory',
+    'place' => 'Place',
+    'loans' => 'Times booked',
+    'conditions' => 'Conditions',
+    'availability' => 'Availability',
+    'provvisorio' => 'Provisional',
+    'scaffale' => 'SHELF',
+    'ripiano' => 'RACK',
+    'scaffale_down' => 'Shelf',
+    'ripiano_down' => 'Rack',
+    'times' => 'times',
+    'borrowed' => 'Borrowed',
+    'available' => 'Available',
+    'show_all' => 'Click to see all books and bio ',
+    'discover' => 'Discover',
+    'notifiche' => 'Notifications',
+    'recensione_success' => 'Review saved successfully!',
+    'copy_book' => 'Book a copy',
+    'inventory_code' => 'Inventory code of copy',
+    'ritira' => 'Please, after the book, go as soon as possible to retire the copy.',
+    'close' => 'Close',
+    'book_button' => 'Book it'
+    ];
