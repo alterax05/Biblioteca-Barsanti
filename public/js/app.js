@@ -94,8 +94,8 @@ new Vue({
         },
 
         loadBooks: function() {
-            $('#loading').show()
-            ;(async () => {
+            $('#loading').show();
+            (async () => {
                 const response = await axios({
                     url: '/api/get_books/page=' + this.page + '/query=' + this.query + '/orderby=' + this.orderby
                     + '/genere='+this.genere+'/autore='+this.autore+'/editore=' + this.editore + '/nazione=' + this.nazione

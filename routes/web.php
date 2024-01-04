@@ -13,25 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', [App\Http\Controllers\IndexController::class, 'index'])->name('home');
 Route::get('/faq', [App\Http\Controllers\IndexController::class, 'faq'])->name('faq');
 Route::get('/mappa', [App\Http\Controllers\IndexController::class, 'mappa'])->name('mappa');
 
 Route::group(['prefix' => 'proponi', 'middleware' => 'auth', 'as' => 'proponi'], function () {
-    Route::get('/', [App\Http\Controllers\IndexController::class, 'proponi']);
-    Route::post('/', [App\Http\Controllers\IndexController::class, 'proponiPost']);
+    Route::get('/', [App\Http\Controllers\IndexController::class, 'proponi'])->name('proponi.get');;
+    Route::post('/', [App\Http\Controllers\IndexController::class, 'proponiPost'])->name('proponi.post');;
 });
 
 Route::get('/nazioni', [App\Http\Controllers\IndexController::class, 'nazioni'])->name('nazioni');
@@ -60,16 +48,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'as' => 'admin.'], f
     Route::get('/prenota', ['as' => 'prenota', 'uses' => 'App\Http\Controllers\AdminController@prenota']);
     Route::get('/completa', ['as' => 'completa', 'uses' => 'App\Http\Controllers\AdminController@completi']);
 
-    Route::get('/insert', ['as' => 'insert', 'uses' => 'App\Http\Controllers\AdminController@insertGet']);
-    Route::post('/insert', [App\Http\Controllers\AdminController::class, 'insert']);
+    Route::get('/insert', ['as' => 'insert', 'uses' => 'App\Http\Controllers\AdminController@insertGet'])->name('insert.get');
+    Route::post('/insert', [App\Http\Controllers\AdminController::class, 'insert'])->name('insert.post');
 
     Route::get('/book/{ISBN}/{codice}', [App\Http\Controllers\AdminController::class, 'book']);
     Route::post('/book/{ISBN}/authors', [App\Http\Controllers\AdminController::class, 'authors']);
 
-    Route::get('/insert/advanced', ['as' => 'insert', 'uses' => 'App\Http\Controllers\AdminController@indexAdvanced']);
-    Route::post('/insert/advanced', [App\Http\Controllers\AdminController::class, 'advancedPost']);
+    Route::get('/insert/advanced', ['as' => 'insert', 'uses' => 'App\Http\Controllers\AdminController@indexAdvanced'])->name('insert.advanced.get');
+    Route::post('/insert/advanced', [App\Http\Controllers\AdminController::class, 'advancedPost'])->name('insert.advanced.post');
 
-    Route::post('/insert/{ISBN}', [App\Http\Controllers\AdminController::class, 'insertPost']);
+    Route::post('/insert/{ISBN}', [App\Http\Controllers\AdminController::class, 'insertPost'])->name('insert.post');
 
     Route::post('/restituisci', [App\Http\Controllers\AdminController::class, 'restituisci']);
 

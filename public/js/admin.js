@@ -4,7 +4,8 @@ new Vue({
         libri: [],
         image: "",
         prenota: null,
-        copia: 0
+        copia: 0,
+        restituisci: null,
     },
     methods: {
         update: function(event) {
@@ -26,24 +27,28 @@ new Vue({
             $('#autore').val(value);
             this.libri = [];
         },
-	rest: function(event) {
+        rest: function(event) {
             let value = event.target.value;
 
             if(value.length === 13) {
-                ;(async () => {
-                    const response = await axios({
-                        url: '/api/admin/restituisci/' + value,
-                        method: 'get'
-                    })
+                axios({
+                    url: '/api/admin/restituisci/' + value,
+                    method: 'get'
+                })
+                .then(response => {
                     if(response.data !== undefined) {
-                        this.restituisci = response.data
-                    }else{
-                        this.restituisci = null
+                        this.restituisci = response.data;
+                    } else {
+                        this.restituisci = null;
                     }
-                })()
+                })
+                .catch(error => {
+                    console.error(error);
+                    this.restituisci = null;
+                });
 
-            }else{
-                this.restituisci = null
+            } else {
+                this.restituisci = null;
             }
         },
         scannerISBN: function(event) {

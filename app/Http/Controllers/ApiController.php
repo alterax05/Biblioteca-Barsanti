@@ -76,8 +76,11 @@ class ApiController extends Controller
     public function restituisci($ISBN) {
 
         $libro = Prestito::where('copie.ISBN', $ISBN)
-            ->whereNull('prestiti.data_restituzione')
+            ->selectRaw('libri.titolo, prestiti.libro, CONCAT(users.name, " ", users.surname) as utente')
             ->leftjoin('copie', 'copie.id_libro', 'prestiti.libro')
+            ->join('libri', 'libri.ISBN', '=','copie.ISBN')
+            ->join('users', 'users.id', '=', 'prestiti.user')
+            ->whereNull('prestiti.data_restituzione')   
             ->get();
 
         return response()->json($libro);
@@ -140,7 +143,7 @@ class ApiController extends Controller
 
     public function get_books($page, $query, $orderby, $genere, $autore, $editore, $nazione, $sezione) {
 
-        if($query != "NaN") {
+        if($query != "NaN" && $query != "undefined") {
             $find = $query;
             if ($find <= 7) {
                 $stopwords = new StopWords('it');
@@ -251,7 +254,7 @@ class ApiController extends Controller
                 break;
         }
 
-        $books = $books->skip(($page-1) * 10)->take(10);
+        $books = $books->skip((intval($page)-1) * 10)->take(10);
         $books = $books->get();
 
         $preferiti = Preferiti::where('id_user', Auth::id())->pluck('ISBN')->toArray();
