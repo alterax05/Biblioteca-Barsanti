@@ -32,38 +32,38 @@ new Vue({
     },
 
     methods: {
-        update: function(event) {
+        update: function (event) {
             value = event.target.value;
 
-            if(value != "") {
-                ;(async () => {
+            if (value != "") {
+                ; (async () => {
                     const response = await axios({
                         url: '/api/search/' + value.replace(' ', '-'),
                         method: 'get'
                     })
                     this.libri = response.data;
                 })()
-            }else{
+            } else {
                 this.libri = [];
             }
         },
-        orderLoad: function() {
+        orderLoad: function () {
             this.orderby = $("#orderby").val()
             history.pushState({}, null,
                 loadUrlParameters(document.location.href, 'orderby', this.orderby))
             this.loadBooks()
         },
-        change: function(action, variable, text) {
+        change: function (action, variable, text) {
             action()
             history.pushState({}, null,
                 loadUrlParameters(document.location.href, variable, text))
             this.loadBooks()
         },
 
-        clearVariable: function(action, variable) {
+        clearVariable: function (action, variable) {
             action();
             history.pushState(null, null,
-                loadUrlParameters(document.location.href, variable, "").replace(variable+'=', ''));
+                loadUrlParameters(document.location.href, variable, "").replace(variable + '=', ''));
             this.loadBooks()
         },
 
@@ -71,10 +71,10 @@ new Vue({
             $(window).scrollTop(0);
         },
 
-        loadQuery: function(value) {
-            if(value === "") {
+        loadQuery: function (value) {
+            if (value === "") {
                 value = $('#searchInp').val();
-                if(value === "")
+                if (value === "")
                     value = "NaN"
             }
             this.query = value
@@ -89,20 +89,20 @@ new Vue({
                 loadUrlParameters("https://" + document.location.host + '/search', 'query', this.query))
             this.loadBooks()
 
-            if(this.scheda_autore != null)
+            if (this.scheda_autore != null)
                 history.pushState({}, null, "https://" + document.location.host + '/search/autore/' + this.scheda_autore.id_autore)
         },
 
-        loadBooks: function() {
+        loadBooks: function () {
             $('#loading').show();
             (async () => {
                 const response = await axios({
                     url: '/api/get_books/page=' + this.page + '/query=' + this.query + '/orderby=' + this.orderby
-                    + '/genere='+this.genere+'/autore='+this.autore+'/editore=' + this.editore + '/nazione=' + this.nazione
-                    + '/sezione=' + this.sezione,
+                        + '/genere=' + this.genere + '/autore=' + this.autore + '/editore=' + this.editore + '/nazione=' + this.nazione
+                        + '/sezione=' + this.sezione,
                     method: 'post',
                     headers: {
-                        'X-CSRF-TOKEN' : $('meta[name=csrf-token]').attr('content'),
+                        'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content'),
                         'X-Requested-With': 'XMLHttpRequest',
                     }
                 })
@@ -128,7 +128,7 @@ new Vue({
             this.editore = 0
             this.genere = 0
             this.autore = 0
-            history.pushState({}, null,"https://" + document.location.host + '/search')
+            history.pushState({}, null, document.location.protocol + "//" + document.location.host + '/search')
         }
     },
 })
