@@ -12,13 +12,13 @@
         "google/apiclient": "^2.15",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",
-        "juanantoniodelgado/stopwords": "^1.2",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/socialite": "^5.5",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "nadar/stemming": "^1.1"
+        "nadar/stemming": "^1.1",
+        "voku/stop-words": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

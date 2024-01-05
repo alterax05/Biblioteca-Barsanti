@@ -18,15 +18,21 @@ use App\Models\Scheda_Autore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Nadar\Stemming\Stemm;
-use StopWords\StopWords;
+use voku\helper\StopWords;
 
 class ApiController extends Controller
 {
     public function search($query) {
+        //Rimozione parole inutili
+        $stopword = new StopWords();
+        $stopwords = $stopword->getStopWordsFromLanguage('it');
+        
+        foreach ($stopwords as $stopword) {
+            $query = str_replace(' ' . $stopword . ' ', ' ', $query);
+        }
 
-        $stopwords = new StopWords('it');
-        $find = $stopwords->clean($query);
-        $find = Stemm::stemPhrase($find, 'it');
+        //TODO: Stemming della query, per cercare anche le parole simili (non funziona, da sostituire)
+        $find = Stemm::stemPhrase($query, 'en');
 
         $libri = Copia::whereRaw("CONCAT(libri.titolo, autore, copie.ISBN) LIKE '%".$find."%'")
             ->selectRaw('titolo as query')
