@@ -35,9 +35,7 @@ new Vue({
 
       if (value != "") {
         axios
-          .get({
-            url: "/api/search/" + value.replace(" ", "-"),
-          })
+          .get("/api/search/" + value.replace(" ", "-"))
           .then((response) => {
             this.libri = response.data;
           })
@@ -117,31 +115,48 @@ new Vue({
     },
     loadBooks: function () {
       $("#loading").show();
-        axios({
-            url: '/api/get_books/page=' + this.page + '/query=' + this.query + '/orderby=' + this.orderby
-                + '/genere=' + this.genere + '/autore=' + this.autore + '/editore=' + this.editore + '/nazione=' + this.nazione
-                + '/sezione=' + this.sezione,
-            method: 'post',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content'),
-                'X-Requested-With': 'XMLHttpRequest',
-            }
-        }).then(response => {
-            this.books = response.data.books;
-            this.lastPage = response.data.pages;
-            this.count = response.data.elements;
-            this.scheda_autore = response.data.scheda_autore;
+      axios({
+        url:
+          "/api/get_books/page=" +
+          this.page +
+          "/query=" +
+          this.query +
+          "/orderby=" +
+          this.orderby +
+          "/genere=" +
+          this.genere +
+          "/autore=" +
+          this.autore +
+          "/editore=" +
+          this.editore +
+          "/nazione=" +
+          this.nazione +
+          "/sezione=" +
+          this.sezione,
+        method: "post",
+        headers: {
+          "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content"),
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((response) => {
+          this.books = response.data.books;
+          this.lastPage = response.data.pages;
+          this.count = response.data.elements;
+          this.scheda_autore = response.data.scheda_autore;
 
-            this.autori = response.data.autori;
-            this.editori = response.data.editori;
-            this.generi = response.data.generi;
-            this.anni = response.data.anni;
-            this.lingue = response.data.lingue;
-        }).then(() => {
-            $('#loading').hide();
-            this.scrollToTop();
-        }).catch(error => {
-            console.error(error);
+          this.autori = response.data.autori;
+          this.editori = response.data.editori;
+          this.generi = response.data.generi;
+          this.anni = response.data.anni;
+          this.lingue = response.data.lingue;
+        })
+        .then(() => {
+          $("#loading").hide();
+          this.scrollToTop();
+        })
+        .catch((error) => {
+          console.error(error);
         });
     },
 

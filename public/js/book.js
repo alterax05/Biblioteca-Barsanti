@@ -3,9 +3,9 @@ new Vue({
   data: {},
   methods: {
     recensioni: function (recensione) {
-      axios
-        .post({
+      axios({
           url: "/api/recensioni/",
+          method: 'post',
           headers: {
             "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content"),
             "X-Requested-With": "XMLHttpRequest",
@@ -31,9 +31,9 @@ new Vue({
         });
     },
     prenotazione: function () {
-      axios
-        .post({
+      axios({
           url: "/api/prenotazione",
+          method: 'post',
           headers: {
             "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content"),
             "X-Requested-With": "XMLHttpRequest",

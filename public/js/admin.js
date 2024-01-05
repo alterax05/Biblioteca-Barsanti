@@ -11,13 +11,9 @@ new Vue({
     update: function (event) {
       let value = event.target.value;
       if (value !== "") {
-        axios
-          .get({
-            url: "/api/autori/" + value.replace(" ", "-"),
-          })
-          .then((response) => {
-            this.libri = response.data;
-          });
+        axios.get("/api/autori/" + value.replace(" ", "-")).then((response) => {
+          this.libri = response.data;
+        });
       } else {
         this.libri = [];
       }
@@ -31,9 +27,7 @@ new Vue({
 
       if (value.length === 13) {
         axios
-          .get({
-            url: "/api/admin/restituisci/" + value,
-          })
+          .get("/api/admin/restituisci/" + value)
           .then((response) => {
             if (response.data !== undefined) {
               this.restituisci = response.data;
@@ -56,9 +50,7 @@ new Vue({
         this.image =
           "https://pictures.abebooks.com/isbn/" + value + "-us-300.jpg";
         axios
-          .get({
-            url: "/api/admin/search/" + value,
-          })
+          .get("/api/admin/search/" + value)
           .then((response) => {
             response.data !== undefined
               ? (this.prenota = response.data)
