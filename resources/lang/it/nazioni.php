@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'italy' => 'Italia',
     'austria' => 'Austria',
     'france' => 'Francia',
@@ -15,5 +14,13 @@ return [
     'ucraine' => 'Ucraina',
     'urss' => 'Unione Sovietica',
     'canada' => 'Canada',
-
+    'romania' => 'Romania',
+    'colombia' => 'Colombia',
+    'turchia' => 'Turchia',
+    'southafrica' => 'Sudafrica',
+    'egypt' => 'Egitto',
+    'bulgaria' => 'Bulgaria',
+    'polonia' => 'Polonia',
+    'jugoslavia' => 'Jugoslavia',
+    'irlanda' => 'Irlanda',
 ];
