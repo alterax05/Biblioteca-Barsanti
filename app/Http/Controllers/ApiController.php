@@ -152,9 +152,12 @@ class ApiController extends Controller
         if($query != "NaN" && $query != "undefined") {
             $find = $query;
             if ($find <= 7) {
-                $stopwords = new StopWords('it');
-                $find = $stopwords->clean($find);
-                $find = Stemm::stemPhrase($find, 'it');
+                $stopword = new StopWords();
+                $stopwords = $stopword->getStopWordsFromLanguage('it');
+                
+                foreach ($stopwords as $stopword) {
+                    $query = str_replace(' ' . $stopword . ' ', ' ', $query);
+                }
             }
             $books = Libro::where('libri.ISBN', '>', '0')
                 ->whereRaw("CONCAT(libri.titolo, autori.autore, libri.isbn) LIKE ?", ["%".$find."%"])
