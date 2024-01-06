@@ -84,7 +84,12 @@ class LoginController extends Controller
         // Get the user's class
         try {
             $googleUser = $service->users->get($userOAuth->getId(),['projection' => 'full', 'viewType' => 'domain_public']);
-            $classe = explode(" ", $googleUser->getOrganizations()[1]['department'])[0];
+            try {
+                $classe = explode(" ", $googleUser->getOrganizations()[1]['department'])[0];
+            } catch (Exception $e) {
+                $classe = "scuola";
+            }
+
             if ($classe == "Dipartimento") {
                 $classe = "Professore";
             }
@@ -93,7 +98,7 @@ class LoginController extends Controller
                 'email' => $userOAuth->email,
             ], [
                 'name' => $userOAuth->user['given_name'],
-                'surname' => $userOAuth->user['family_name'],
+                'surname' => $userOAuth->user['family_name'] ?? $userOAuth->user['given_name'],
                 'class' => $classe,
             ]);
 

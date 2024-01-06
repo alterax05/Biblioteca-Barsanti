@@ -181,24 +181,24 @@ class ApiController extends Controller
             WHERE copie.ISBN = libri.ISBN AND data_restituzione IS NULL) prestiti,
             (SELECT COALESCE(AVG(punteggio), 0) FROM recensioni WHERE recensioni.ISBN = libri.ISBN) media');
 
-        if($editore != "0")
+        if($editore != "0" && $editore != "undefined" )
             $books = $books->where('editore', $editore);
 
-        if($autore != "0") {
+        if($autore != "0" && $autore != "undefined" ) {
             $ids = Libri_Autori::where('id_autore', $autore)->select('ISBN')->get();
             $books = $books->whereIn('libri.ISBN', $ids);
         }
 
-        if($genere != "0") {
+        if($genere != "0" && $genere != "undefined" ) {
             $ids = Libri_Generi::where('id_genere', $genere)->select('ISBN')->get();
             $books = $books->whereIn('libri.ISBN', $ids);
         }
 
-        if($sezione != "0") {
+        if($sezione != "0" && $sezione != "undefined" ) {
             $books = $books->where('reparto', $sezione);
         }
 
-        if($nazione != "0") {
+        if($nazione != "0" && $nazione != "undefined") {
             $ids = Scheda_Autore::where('id_nazione', $nazione)
                 ->join('libri_autori', 'libri_autori.id_autore', 'schede_autori.id_autore')
                 ->select('ISBN')->get();
@@ -229,7 +229,7 @@ class ApiController extends Controller
         $pages = ceil($count / 10);
 
         $schedaAutore = null;
-        if($autore != 0) {
+        if($autore != 0 && $autore != "undefined") {
             $schedaAutore = Scheda_Autore::where('id_autore', $autore)->first();
             if($schedaAutore != null) {
                 $schedaAutore->belongsNazione;
