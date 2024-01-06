@@ -455,10 +455,19 @@ class AdminController extends Controller
     }
 
     public function bacheca() {
-        $autori_bacheca = DB::table('autori_bacheca')
-            ->join('autori', 'autori.id_autore', 'autori_bacheca.id_autore')
-            ->leftJoin('schede_autori', 'schede_autori.id_autore', 'autori_bacheca.id_autore')
-            ->get();
+        $autori_bacheca = Autori_Bacheca::join('autori', 'autori.id_autore', '=', 'autori_bacheca.id_autore')
+        ->leftJoin('schede_autori', 'schede_autori.id_autore', '=', 'autori_bacheca.id_autore')
+        ->select(
+            'autori_bacheca.id_autore',
+            'autori_bacheca.subtitle',
+            'autori.autore',
+            'schede_autori.location',
+            'schede_autori.id_nazione',
+            'schede_autori.anno_nascita',
+            'schede_autori.anno_morte',
+            'schede_autori.avatar'
+        )
+        ->get();
 
         $autori = Autore::all();
         return view('admin.bacheca')
