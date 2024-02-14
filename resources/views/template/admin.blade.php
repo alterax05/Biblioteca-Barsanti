@@ -8,12 +8,7 @@
                 <div class="search-fast">
                     <form method="POST" action="/admin/restituisci">
                         @csrf
-                        <label>Inserisci il codice ISBN del libro da restituire</label>
-                        <input @input="rest" type="text" name="isbn" class="form-control" required>
-                        <select v-if="restituisci != null" type="text" name="libro" class="form-select" style="margin-top: 10px;" required>
-                            <option v-for="copia in restituisci" :key="copia.libro + '#'" :value="copia.libro" v-html="copia.titolo + ' - ' + copia.utente"></option>
-                        </select>
-                        <button v-if="restituisci != null && restituisci.length !== 0" type="submit" class="btn-primary btn" style="margin-top: 10px; font-size: 13px;width: 100%;">Restituisci</button>
+                        <restituisci></restituisci>
                     </form>
                 </div>
                 <ul>

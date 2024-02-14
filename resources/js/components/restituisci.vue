@@ -9,33 +9,30 @@
         style="margin-top: 10px; font-size: 13px;width: 100%;">Restituisci</button>
 </template>
 
-
-
 <script setup lang="ts">
+    import { ref, type InputHTMLAttributes, type ReservedProps } from 'vue';
+    import axios from 'axios';
 
-import { ref, type InputHTMLAttributes, type ReservedProps } from 'vue';
-import axios from 'axios';
-
-interface Restituisci {
-    libro: string;
-    titolo: string;
-    utente: string;
-}
-
-const restituisci = ref<Restituisci[] | null>(null);
-function rest(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    if (value.length === 13) {
-        axios
-        .get("/api/admin/restituisci/" + value)
-        .then((response) => {
-            if (response.data !== undefined) {
-                restituisci.value = response.data as Restituisci[];
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+    interface Restituisci {
+        libro: string;
+        titolo: string;
+        utente: string;
     }
-}
+
+    const restituisci = ref<Restituisci[] | null>(null);
+    function rest(event: Event) {
+        const value = (event.target as HTMLInputElement).value;
+        if (value.length === 13) {
+            axios
+            .get("/api/admin/restituisci/" + value)
+            .then((response) => {
+                if (response.data !== undefined) {
+                    restituisci.value = response.data as Restituisci[];
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        }
+    }
 </script>

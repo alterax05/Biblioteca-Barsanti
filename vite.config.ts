@@ -7,10 +7,10 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css',
-                    'public/css/app.css',
                     'resources/sass/app.scss',
-                    'resources/js/app.js',
-                    'public/js/*'
+                    'resources/js/**/*.js',
+                    'resources/js/**/*.vue',
+                    'resources/js/**/*.ts'
             ],
             refresh: true,
         }),
@@ -36,6 +36,7 @@ export default defineConfig({
     resolve: {
         alias: {
             vue: 'vue/dist/vue.esm-bundler.js',
+            '@': '/resources/js',
         }
     }
 });
