@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, type InputHTMLAttributes, type ReservedProps } from 'vue';
+    import { ref } from 'vue';
     import axios from 'axios';
 
     interface Restituisci {

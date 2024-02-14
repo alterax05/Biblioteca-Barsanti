@@ -63,7 +63,7 @@ class ApiController extends Controller
             ->first();
 
         if($libro == null)
-            return "Non trovato.";
+            return response()->json(['error' => 'Libro non trovato'], 404);
 
         $libro->copie = Copia::where('copie.ISBN', $ISBN)
             ->whereRaw("(SELECT COUNT(*) FROM prestiti WHERE prestiti.libro = copie.id_libro) < 1")
@@ -99,10 +99,9 @@ class ApiController extends Controller
     public function autori($query) {
         $find = str_replace("'", "''", str_replace('-', ' ', $query));
         $autori = Autore::whereRaw("autore LIKE '%".$find."%'")
-            ->selectRaw('autore as query')
+            ->selectRaw('autore')
             ->limit(20)
             ->get();
-
         return response()->json($autori);
     }
 

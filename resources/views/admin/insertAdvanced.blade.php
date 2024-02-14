@@ -32,21 +32,10 @@
                 <div class="col-6">
                     <label>Seleziona l'autore</label>
                     <div style="position: relative">
-                        <input id="autore" name="autore" type="text" style="width: 100%; padding: 3px 20px;" required autocomplete="off" @input="update">
-                        <ul class="search-list">
-                            <li v-for="(row,rid) in libri" :key="rid">
-                                <a @click="changeValue(row.query)">
-                                    <div class="option-search">
-                                        <div class="col-lg-12">
-                                            <p v-html="row.query"></p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+                        <lista_autori></lista_autori>
                     </div>
-
                 </div>
+
                 <div class="col-6">
                     <label>Seleziona le sue condizioni</label>
                     <select name="editore" class="form-select" style="width: 100%; height: min-content;" required>
