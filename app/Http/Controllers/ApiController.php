@@ -443,8 +443,7 @@ class ApiController extends Controller
             ->get();
     }
 
-    private function getLingueFilter($ids)
-    {
+    private function getLingueFilter($ids) {
         return Libro::whereIntegerInRaw('ISBN', $ids)
             ->selectRaw('lingue.tag_lingua, lingue.lingua, COUNT(*) as numero')
             ->join('lingue', 'libri.lingua', '=', 'lingue.tag_lingua')
@@ -453,8 +452,7 @@ class ApiController extends Controller
             ->get();
     }
 
-    private function getGenereFilter($ids)
-    {
+    private function getGenereFilter($ids) {
         return Libri_Generi::whereIntegerInRaw('libri_generi.ISBN', $ids)
             ->selectRaw('generi.id_genere, generi.genere, COUNT(*) as numero')
             ->join('generi', 'generi.id_genere', '=', 'libri_generi.id_genere')
@@ -464,8 +462,7 @@ class ApiController extends Controller
             ->get();
     }
 
-    private function getAnniFilter($ids)
-    {
+    private function getAnniFilter($ids) {
         return Libro::whereIntegerInRaw('ISBN', $ids)
             ->selectRaw('anno_stampa, COUNT(*) as numero')
             ->groupBy('anno_stampa')

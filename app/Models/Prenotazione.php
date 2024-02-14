@@ -8,6 +8,6 @@ class Prenotazione extends Model {
 
     protected $table = 'prenotazioni';
     protected $primaryKey = 'id_prenotazione';
-    protected $fillable = ['user', 'id_copia'];
+    protected $fillable = ['user', 'id_copia', 'ISBN'];
     const UPDATED_AT = null;
 }

@@ -8,7 +8,7 @@ class Prestito extends Model
 {
     protected $table = 'prestiti';
     protected $primaryKey = 'id_prestito';
-    protected $fillable = ['libro', 'user'];
+    protected $fillable = ['libro', 'user', 'ISBN'];
     const UPDATED_AT = null;
     const CREATED_AT = null;
 }

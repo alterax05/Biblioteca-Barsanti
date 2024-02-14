@@ -100,7 +100,8 @@ class AdminController extends Controller
 
         Prestito::create([
             'libro' => $request->input('copia'),
-            'user' => $user->id
+            'user' => $user->id,
+            'ISBN' => $request->input('ISBN')
         ]);
 
         Prenotazione::where('user', $user->id)->where('id_copia', $request->input('copia'))->delete();
