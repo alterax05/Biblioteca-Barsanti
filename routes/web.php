@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -105,4 +108,8 @@ Route::get('language/{locale}', function ($locale) {
     app()->setLocale($locale);
     session()->put('locale', $locale);
     return redirect()->back();
+});
+
+Route::group(['prefix'=>'images'], function () {
+    Route::get('images/covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);
 });
