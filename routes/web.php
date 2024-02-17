@@ -111,5 +111,5 @@ Route::get('language/{locale}', function ($locale) {
 });
 
 Route::group(['prefix'=>'images'], function () {
-    Route::get('images/covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);
+    Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);
 });
