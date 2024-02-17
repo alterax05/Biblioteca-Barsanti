@@ -4,6 +4,6 @@
 @section('admin-content')
 <form method="POST">
     @csrf
-    <presta></presta>
+    <Presta />
 </form>
 @endsection

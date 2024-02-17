@@ -32,7 +32,7 @@
                 <div class="col-6">
                     <label>Seleziona l'autore</label>
                     <div style="position: relative">
-                        <lista_autori></lista_autori>
+                        <ListaAutori />
                     </div>
                 </div>
 

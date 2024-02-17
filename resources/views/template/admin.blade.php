@@ -8,7 +8,7 @@
                 <div class="search-fast">
                     <form method="POST" action="/admin/restituisci">
                         @csrf
-                        <restituisci></restituisci>
+                        <Restituisci />
                     </form>
                 </div>
                 <ul>
