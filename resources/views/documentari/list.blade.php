@@ -10,7 +10,7 @@
             <div class="video-wrapper col-4">
                 <a href="/documentaries/{{$doc->id_documentario}}">
                 <div class="cc-card video-cc">
-                    <div class="cover-video" style="background-image: url({{ $doc->id_tipologia == "1"? "https://i.ytimg.com/vi/".$doc->embed."/hqdefault.jpg" : $doc->thumbnail }})">
+                    <div class="cover-video" style="background-image: url({{ $doc->id_tipologia == '1'? 'https://i.ytimg.com/vi/'.$doc->embed.'/hqdefault.jpg' : $doc->thumbnail }})">
                         <div class="module-bg"></div>
                     </div>
                     <div class="info">
