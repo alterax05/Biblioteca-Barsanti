@@ -103,7 +103,7 @@
 
             <div v-if="scheda_autore != null" class="cc-card author-card row" style="margin-bottom: 20px;">
                 <div class="d-flex">
-                    <img :src="'/imgs/authors/'+scheda_autore.id_autore+'.jpg'">
+                    <img :src="'/imgs/authors/'+scheda_autore.id_autore+'.webp'">
                     <div class="author d-flex flex-column">
                         <p v-html="scheda_autore.belongs_autore.autore"></p>
                         <div class="d-flex flex-row">

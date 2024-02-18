@@ -118,7 +118,7 @@
                     <div class="autori-card cc-card">
 
                         <div class="autori-bacheca">
-                            <img class="img-autori" src="/imgs/authors/{{ $scheda->id_autore }}.jpg">
+                            <img class="img-autori" src="/imgs/authors/{{ $scheda->id_autore }}.webp">
                             <div>
                                 <p>{{ __('book.discover')  }} {{ $autore->belongsAutore->autore }} ({{ $scheda->location }})</p>
                                 <a href="/search/autore/{{ $autore->id_autore }}">{{ __('book.show_all') }}</a>

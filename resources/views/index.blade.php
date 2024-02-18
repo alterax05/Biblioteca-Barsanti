@@ -55,7 +55,7 @@
                     <div class="autori-card cc-card">
 
                         <div class="autori-bacheca">
-                            <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.jpg">
+                            <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.webp">
                             <div>
                                 <p>{{ __('home.discover') }} {{ $autore->autore }} ({{ $autore->location }}) <a href="/search/autore/{{ $autore->id_autore }}">{{ __('home.more') }}</a></p>
                                 <label>{{ $autore->subtitle }}</label>

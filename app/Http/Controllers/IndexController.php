@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Reparto;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class IndexController extends Controller
 {
@@ -126,13 +125,6 @@ class IndexController extends Controller
                         $authors[] = str_replace('.', '', $author);
                     }
                 }
-
-                $img = Image::make("https://www.ibs.it/images/".$ISBN."_0_0_536_0_75.jpg");
-                $img->resize(136, 209, function ($constraint) {
-                    $constraint->aspectRatio();
-                });
-
-                $img->save(public_path('imgs/covers/' . $ISBN . ".jpg"));
 
                 if (in_array('categories', array_keys($details['volumeInfo'])))
                     foreach ($details['volumeInfo']['categories'] as $category) {

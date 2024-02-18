@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
-use Exception;
+use Intervention\Image\Laravel\Facades\Image;
 
 class ImageController extends Controller
 {
@@ -55,7 +55,7 @@ class ImageController extends Controller
 
     public function getCover($ISBN)
     {
-        $imagePath = 'covers/'. $ISBN.".jpg";
+        $imagePath = 'covers/'. $ISBN.".webp";
 
         $found = false;
         // Check if image exists locally
@@ -65,7 +65,8 @@ class ImageController extends Controller
                 if ($imageUrl) {
                     $response = Http::get($imageUrl);
                     if ($response->successful() && $response->body() != Storage::get('covers/defaultCopertinaIBS.jpg')) {
-                        Storage::put($imagePath, $response->body());
+                        $img = Image::read($response->body());
+                        Storage::put($imagePath, $img->toWebp(90));
                         $found = true;
                         break;
                     }

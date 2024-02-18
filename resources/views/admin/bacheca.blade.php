@@ -16,7 +16,7 @@
         <div class="col-12">
                 <div class="autori-card cc-card" style="margin: 10px 0">
                     <div class="autori-bacheca">
-                        <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.jpg">
+                        <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.webp">
                         <div class="row" style="width: 100%">
                             <div class="col-10">
                                 <p>{{ $autore->autore }}</p>
