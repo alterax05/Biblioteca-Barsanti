@@ -128,7 +128,7 @@
                         <div class="row">
                             @foreach($libri as $libro)
                                 <div class="col-3">
-                                    <img onerror="imgError(this)" src="/imgs/covers/{{ $libro->ISBN }}.jpg">
+                                    <img onerror="imgError(this)" src="/covers/{{ $libro->ISBN }}">
                                 </div>
                             @endforeach
                         </div>

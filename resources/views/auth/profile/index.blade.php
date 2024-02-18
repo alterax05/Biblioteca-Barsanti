@@ -15,7 +15,7 @@
                 <div class="libro row cc-card spacer-card">
                     <div class="col-3">
                         <a href="/book/{{$libro->ISBN}}">
-                            <img onerror="imgError(this)" src="/imgs/covers/{{ $libro->ISBN }}.jpg" alt="cover">
+                            <img onerror="imgError(this)" src="/covers/{{ $libro->ISBN }}" alt="cover">
                         </a>
                     </div>
                     <div class="col-9 row">

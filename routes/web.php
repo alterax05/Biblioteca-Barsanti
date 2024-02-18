@@ -110,6 +110,4 @@ Route::get('language/{locale}', function ($locale) {
     return redirect()->back();
 });
 
-Route::group(['prefix'=>'images'], function () {
-    Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);
-});
+Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);

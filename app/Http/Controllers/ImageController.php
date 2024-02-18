@@ -55,7 +55,7 @@ class ImageController extends Controller
 
     public function getCover($ISBN)
     {
-        $imagePath = 'images/covers/'. $ISBN.".jpg";
+        $imagePath = 'covers/'. $ISBN.".jpg";
 
         $found = false;
         // Check if image exists locally
@@ -64,7 +64,7 @@ class ImageController extends Controller
                 $imageUrl = $this->getImageUrl($provider, $ISBN);
                 if ($imageUrl) {
                     $response = Http::get($imageUrl);
-                    if ($response->successful() && $response->body() != Storage::get('images/covers/defaultCopertinaIBS.jpg')) {
+                    if ($response->successful() && $response->body() != Storage::get('covers/defaultCopertinaIBS.jpg')) {
                         Storage::put($imagePath, $response->body());
                         $found = true;
                         break;
@@ -72,7 +72,7 @@ class ImageController extends Controller
                 }
             }
             if(!$found){
-                $imagePath = 'images/covers/notcover.jpg';
+                $imagePath = 'covers/notCover.jpg';
             }
         }
 
