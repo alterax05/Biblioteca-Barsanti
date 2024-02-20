@@ -8,7 +8,8 @@ class Nazione extends Model
 {
     protected $table = 'nazioni';
     protected $primaryKey = 'id_nazione';
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
-
+    protected $keyType = 'string';
+    protected $incrementing = false;
+    protected $timestamps = false;
+    protected $fillable = ['nazione', 'tag'];
 }

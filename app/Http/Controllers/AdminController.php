@@ -36,7 +36,9 @@ class AdminController extends Controller
     }
 
     public function index() {
-        $trackers = Tracker::whereRaw("visit_date = CURRENT_DATE AND NOT ip = '127.0.0.1'")
+        $trackers = Tracker::where('visit_date', date('Y-m-d'))
+            ->and()
+            ->whereNot('ip', '=', '127.0.0.1')
             ->get();
         return view('admin.index')->with('trackers', $trackers);
     }

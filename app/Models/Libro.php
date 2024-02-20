@@ -16,15 +16,19 @@ class Libro extends Model
     }
 
     public function belongsAutori() {
-        return $this->hasMany(Libri_Autori::class, 'ISBN');
+        return $this->belongsToMany(Autore::class, 'libri_autori', 'id_autore', 'ISBN');
     }
 
     public function belongsGeneri() {
-        return $this->hasMany(Libri_Generi::class, 'ISBN');
+        return $this->belongsToMany(Genere::class, 'libri_generi', 'id_genere', 'ISBN');
     }
 
     public function belongsLingua() {
         return $this->belongsTo(Lingua::class, 'lingua');
+    }
+
+    public function belongsReparto() {
+        return $this->belongsTo(Reparto::class, 'reparto');
     }
 
     public static function generate($fileName, $prestiti) {

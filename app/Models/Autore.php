@@ -8,11 +8,16 @@ class Autore extends Model
 {
     protected $table = 'autori';
     protected $primaryKey = 'id_autore';
+    protected $keyType = 'bigint';
+    protected $incrementing = true;
     protected $fillable = ['autore'];
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $timestamp = false;
 
     public function belongsScheda() {
         return $this->belongsTo(Scheda_Autore::class, 'id_autore');
+    }
+
+    public function belongsLibri() {
+        return $this->belongsToMany(Libro::class, 'libri_autori', 'id_autore', 'ISBN');
     }
 }

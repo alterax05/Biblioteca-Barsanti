@@ -8,6 +8,5 @@ class Preferiti extends Model {
     protected $table = 'preferiti';
     protected $primaryKey = 'preferiti';
     protected $fillable = ['id_user', 'ISBN'];
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $timestamps = false;
 }

@@ -8,4 +8,5 @@ class Reparto extends Model
 {
     protected $table = 'reparti';
     protected $primaryKey = 'id_reparto';
+    protected $fillable = ['reparto', 'icon'];
 }

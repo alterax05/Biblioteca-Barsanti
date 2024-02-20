@@ -10,6 +10,9 @@ class Genere extends Model
     protected $table = 'generi';
     protected $primaryKey = 'id_genere';
     protected $fillable = ['genere'];
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $timestamps = false;
+
+    public function belongsLibri() {
+        return $this->belongsToMany(Libro::class, 'libri_generi', 'ISBN', 'id_genere');
+    }
 }

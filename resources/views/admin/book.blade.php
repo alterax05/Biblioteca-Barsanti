@@ -5,7 +5,7 @@
     <div class="cc-card filter-card">
         <div class="row">
             <div class="col-4">
-                <img class="book-cover" src="https://pictures.abebooks.com/isbn/{{ $libro->ISBN }}-us-300.jpg" style="width: 100%;">
+                <img class="book-cover" src="covers/{{ $libro->ISBN }}" style="width: 100%;">
             </div>
             <div class="col-8">
                 <h5 style="margin-top: 20px;">Titolo: {{ $libro->titolo }}</h5>
@@ -64,7 +64,7 @@
                     <button class="btn btn-primary">Inserisci il libro</button>
                 </div>
             </div>
-        </form>
+        </form> 
         @if(!empty($message))
             <label>{{ $message }}</label>
         @endif

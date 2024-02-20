@@ -14,7 +14,7 @@ class Autori_Bacheca extends Model
 
     protected $keyType = 'bigint';
 
-    const CREATED_AT = 'created_at';
+    const UPDATED_AT = null;
 
     protected $fillable = [
         'id_autore',

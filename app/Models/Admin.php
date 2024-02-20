@@ -8,6 +8,7 @@ class Admin extends Model
 {
     protected $table = 'admins';
     protected $primaryKey = 'id_user';
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $keyType = 'bigint';
+    protected $incrementing = true;
+    protected $timestamps = false;
 }

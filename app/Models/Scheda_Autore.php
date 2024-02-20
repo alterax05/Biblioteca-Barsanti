@@ -8,9 +8,8 @@ class Scheda_Autore extends Model
 {
     protected $table = 'schede_autori';
     protected $primaryKey = 'id_autore';
-    protected $fillable = ['avatar', 'descrizione'];
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $fillable = ['location','id_nazione','anno_nascita','anno_morte','avatar', 'descrizione', 'nobel'];
+    protected $timestamps = false;
 
     public function belongsAutore() {
         return $this->belongsTo(Autore::class, 'id_autore');
