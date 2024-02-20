@@ -17,7 +17,7 @@ return new class extends Migration
         
         Schema::create('generi', function (Blueprint $table) {
             $table->id('id_genere');
-            $table->string('genere', 100)->nullable(false);
+            $table->string('genere', 100);
         });
     }
 

@@ -8,8 +8,6 @@ class Autore extends Model
 {
     protected $table = 'autori';
     protected $primaryKey = 'id_autore';
-    protected $keyType = 'bigint';
-    protected $incrementing = true;
     protected $fillable = ['autore'];
     protected $timestamp = false;
 

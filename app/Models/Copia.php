@@ -30,7 +30,7 @@ class Copia extends Model
     }
 
     public function belongsAutori() {
-        return $this->hasMany(Libri_Autori::class, 'ISBN');
+        return $this->belongsToMany(Autore::class, 'libri_autori', 'ISBN' ,'id_autore');
     }
 
     public function belongsLingua() {

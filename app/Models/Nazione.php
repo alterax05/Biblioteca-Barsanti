@@ -9,7 +9,8 @@ class Nazione extends Model
     protected $table = 'nazioni';
     protected $primaryKey = 'id_nazione';
     protected $keyType = 'string';
-    protected $incrementing = false;
-    protected $timestamps = false;
+    // se si modifica incrementing o timestamp esse devono essere dichiarate come public
+    public $incrementing = false;
+    public $timestamps = false;
     protected $fillable = ['nazione', 'tag'];
 }
