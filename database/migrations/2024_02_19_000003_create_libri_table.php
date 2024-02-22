@@ -18,8 +18,9 @@ return new class extends Migration
             $table->foreignId('editore')->constrained('editori', 'id_editore');
             $table->year('anno_stampa');
             $table->smallInteger('pagine');
-            $table->smallInteger('altezza');
-            $table->string('lingua')->references('tag_lingua')->on('lingue');
+            $table->string('altezza', 10);
+            $table->string('lingua', 2);
+            $table->foreign('lingua')->references('tag_lingua')->on('lingue');
             $table->foreignId('reparto')->constrained('reparti', 'id_reparto');
         });
     }

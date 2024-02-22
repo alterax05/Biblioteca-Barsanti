@@ -13,6 +13,7 @@
         "intervention/image-laravel": "^1.1",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
+        "laravel/scout": "^10.8",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.4",
@@ -22,7 +23,9 @@
         "voku/stop-words": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.15",
         "fakerphp/faker": "^1.9.1",
+        "larastan/larastan": "^2.9",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",

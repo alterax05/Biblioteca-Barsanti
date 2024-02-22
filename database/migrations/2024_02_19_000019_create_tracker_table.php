@@ -16,7 +16,7 @@ return new class extends Migration
         }
 
         Schema::create('tracker', function (Blueprint $table) {
-            $table->id('id_tracker');
+            $table->id();
             $table->ipAddress('ip');
             $table->date('visit_date');
             $table->time('visit_time');

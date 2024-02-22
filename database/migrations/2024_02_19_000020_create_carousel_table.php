@@ -21,7 +21,7 @@ return new class extends Migration
             $table->id('id_carousel');
             $table->string('title', 100);
             $table->string('subtitle', 100);
-            $table->foreignId('autore')->constrained('autori', 'id_autore')->nullable();
+            $table->foreignId('autore')->nullable()->constrained('autori', 'id_autore');
             $table->string('image', 100);
         });
     }

@@ -33,13 +33,14 @@ class Tracker Extends Model {
     // Fill in the IP and today's date
     public function scopeCurrent($query) {
         return $query->where('ip', $_SERVER['REMOTE_ADDR'])
-            ->where('date', date('Y-m-d'));
+            ->where('visit_date', date('Y-m-d'));
     }
 
     public static function hit() {
         static::firstOrCreate([
             'ip'   => $_SERVER['REMOTE_ADDR'],
-            'date' => date('Y-m-d'),
+            'visit_date' => date('Y-m-d'),
+            'visit_time' => date('H:i:s'),
             'user' => (Auth()->check())?Auth()->id():0
         ])->save();
     }
