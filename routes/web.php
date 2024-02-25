@@ -116,7 +116,5 @@ Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCo
 
 Route::get('/testroute', function() {
     $name = "Funny Coder";
-
-    // The email sending is done using the to method on the Mail facade
     Mail::to('giovanni.dequattro@barsanti.edu.it')->send(new Test($name));
 });
