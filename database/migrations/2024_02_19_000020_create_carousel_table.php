@@ -20,8 +20,8 @@ return new class extends Migration
         Schema::create('carousel', function (Blueprint $table) {
             $table->id('id_carousel');
             $table->string('title', 100);
-            $table->string('subtitle', 100);
-            $table->foreignId('autore')->nullable()->constrained('autori', 'id_autore');
+            $table->text('subtitle');
+            $table->foreignId('id_autore')->nullable()->constrained('autori', 'id_autore');
             $table->string('image', 100);
         });
     }

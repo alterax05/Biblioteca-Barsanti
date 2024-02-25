@@ -16,7 +16,7 @@ class Libro extends Model
     }
 
     public function belongsAutori() {
-        return $this->belongsToMany(Autore::class, 'libri_autori', 'id_autore', 'ISBN');
+        return $this->belongsToMany(Autore::class, 'libri_autori', 'ISBN', 'id_autore');
     }
 
     public function belongsGeneri() {

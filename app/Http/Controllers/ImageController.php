@@ -27,6 +27,7 @@ class ImageController extends Controller
             $imageUrl = $details['volumeInfo']['imageLinks']['thumbnail'] ?? "";
             return $imageUrl;
         }
+        return "";
     }
 
     protected function getCoverLinkIBS($ISBN) : string
@@ -66,14 +67,14 @@ class ImageController extends Controller
                     $response = Http::get($imageUrl);
                     if ($response->successful() && $response->body() != Storage::get('covers/defaultCopertinaIBS.jpg')) {
                         $img = Image::read($response->body());
-                        Storage::put($imagePath, $img->toWebp(90));
+                        Storage::put($imagePath, $img->resize(272,418)->toWebp(90));
                         $found = true;
                         break;
                     }
                 }
             }
             if(!$found){
-                $imagePath = 'covers/notCover.jpg';
+                $imagePath = 'covers/notCover.png';
             }
         }
 

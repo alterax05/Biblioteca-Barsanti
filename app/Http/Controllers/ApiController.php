@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Libri_Autori;
-use App\Models\Libri_Generi;
 use App\Models\Libro;
 use App\Models\Copia;
 use App\Models\Editore;
 use App\Models\Condizioni;
 use App\Models\Lingua;
+use App\Models\Genere;
 use App\Models\Autore;
 use App\Models\Preferiti;
 use App\Models\Prenotazione;
@@ -22,8 +21,10 @@ use voku\helper\StopWords;
 
 class ApiController extends Controller
 {
+    //TODO: Stemming della query, per cercare anche le parole simili (non funziona, da sostituire)
     public function search($query) {
         //Rimozione parole inutili
+        
         $stopword = new StopWords();
         $stopwords = $stopword->getStopWordsFromLanguage('it');
         
@@ -31,7 +32,6 @@ class ApiController extends Controller
             $query = str_replace(' ' . $stopword . ' ', ' ', $query);
         }
 
-        //TODO: Stemming della query, per cercare anche le parole simili (non funziona, da sostituire)
         $find = Stemm::stemPhrase($query, 'en');
 
         $libri = Copia::whereRaw("CONCAT(libri.titolo, autore, copie.ISBN) LIKE '%".$find."%'")
@@ -83,10 +83,10 @@ class ApiController extends Controller
 
         $libro = Prestito::where('copie.ISBN', $ISBN)
             ->selectRaw('libri.titolo, prestiti.libro, CONCAT(users.name, " ", users.surname) as utente')
-            ->leftjoin('copie', 'copie.id_libro', 'prestiti.libro')
+            ->leftjoin('copie', 'copie.id_copia', 'prestiti.id_copia')
             ->join('libri', 'libri.ISBN', '=','copie.ISBN')
-            ->join('users', 'users.id', '=', 'prestiti.user')
-            ->whereNull('prestiti.data_restituzione')   
+            ->join('users', 'users.id', '=', 'prestiti.id:user')
+            ->whereNull('prestiti.data_fine')   
             ->get();
 
         return response()->json($libro);
@@ -169,27 +169,27 @@ class ApiController extends Controller
             }
 
         }else{
-            $books = Libro::where('libri.ISBN', '>', '0');
+            $books = Libro::query();
         }
 
-        $books = $books
-            ->selectRaw('libri.ISBN, libri.titolo, libri.anno_stampa, libri.editore, libri.lingua,
+        $books = $books->selectRaw('libri.ISBN, libri.titolo, libri.anno_stampa, libri.editore, libri.lingua,
             (SELECT COUNT(*) FROM copie WHERE copie.ISBN = libri.ISBN) copie,
             (SELECT COUNT(*) FROM prestiti
-            INNER JOIN copie ON prestiti.libro = copie.id_libro
-            WHERE copie.ISBN = libri.ISBN AND data_restituzione IS NULL) prestiti,
+            INNER JOIN copie ON prestiti.id_copia = copie.id_copia
+            WHERE copie.ISBN = libri.ISBN AND data_fine IS NULL) prestiti,
             (SELECT COALESCE(AVG(punteggio), 0) FROM recensioni WHERE recensioni.ISBN = libri.ISBN) media');
 
         if($editore != "0" && $editore != "undefined" )
             $books = $books->where('editore', $editore);
 
         if($autore != "0" && $autore != "undefined" ) {
-            $ids = Libri_Autori::where('id_autore', $autore)->select('ISBN')->get();
+            $ids = Autore::select('ISBN')->belongsLibri()->where('id_autore', $autore)->get();
             $books = $books->whereIn('libri.ISBN', $ids);
         }
 
         if($genere != "0" && $genere != "undefined" ) {
-            $ids = Libri_Generi::where('id_genere', $genere)->select('ISBN')->get();
+            
+            $ids = Genere::select('ISBN')->belongsLibri()->where('id_genere', $genere)->get();
             $books = $books->whereIn('libri.ISBN', $ids);
         }
 
@@ -206,25 +206,19 @@ class ApiController extends Controller
 
 
         $ids = [];
-        foreach($books->get() as $libro) {
+        $test1= $books->get();
+        foreach($test1 as $libro) {
             $ids[] = $libro->ISBN;
         }
 
-        $autori = Libri_Autori::whereIntegerInRaw('libri_autori.ISBN', $ids)
-            ->selectRaw('autori.id_autore, autori.autore, COUNT(*) as numero')
-            ->join('autori', 'autori.id_autore', '=', 'libri_autori.id_autore')
-            ->groupBy('autori.id_autore', 'autori.autore')
-            ->orderByDesc('numero')
-            ->limit(10)
-            ->get();
-
+        $autori = $this->getAutoriFilter($ids);
         $generi = $this->getGenereFilter($ids);
         $editori = $this->getEditoriFilter($ids);
         $anni = $this->getAnniFilter($ids);
         $lingue = $this->getLingueFilter($ids);
 
 
-        $count = count($books->get());
+        $count = $books->count();
         $pages = ceil($count / 10);
 
         $schedaAutore = null;
@@ -263,20 +257,12 @@ class ApiController extends Controller
         }
 
         $books = $books->skip((intval($page)-1) * 10)->take(10);
+        $books = $books->with(['belongsAutori.belongsScheda', 'belongsGeneri', 'belongsEditore', 'belongsAutori', 'belongsAutori.belongsScheda.belongsNazione']);
         $books = $books->get();
-
+                
         $preferiti = Preferiti::where('id_user', Auth::id())->pluck('ISBN')->toArray();
 
         foreach($books as $book) {
-            $book->belongsEditore;
-            foreach($book->belongsAutori as $i) {
-                $i->belongsAutore;
-                $i->belongsAutore->belongsScheda;
-                if($i->belongsAutore->belongsScheda != null)
-                    $i->belongsAutore->belongsScheda->belongsNazione;
-            }
-            foreach($book->belongsGeneri as $i) $i->belongsGenere;
-
             if(in_array($book->ISBN, $preferiti)) {
                 $book->preferiti = 1;
             }
@@ -452,19 +438,31 @@ class ApiController extends Controller
     }
 
     private function getGenereFilter($ids) {
-        return Libri_Generi::whereIntegerInRaw('libri_generi.ISBN', $ids)
-            ->selectRaw('generi.id_genere, generi.genere, COUNT(*) as numero')
-            ->join('generi', 'generi.id_genere', '=', 'libri_generi.id_genere')
-            ->groupBy('generi.id_genere', 'generi.genere')
-            ->orderByDesc('numero')
-            ->limit(10)
-            ->get();
+         return Genere::select(['generi.id_genere', 'generi.genere'])
+        ->selectRaw('COUNT(*) as numero')
+        ->join('libri_generi', 'generi.id_genere', '=', 'libri_generi.id_genere')
+        ->whereIn('libri_generi.ISBN', $ids)
+        ->groupBy('generi.id_genere', 'generi.genere')
+        ->orderByDesc('numero')
+        ->limit(10)
+        ->get();
     }
 
     private function getAnniFilter($ids) {
         return Libro::whereIntegerInRaw('ISBN', $ids)
             ->selectRaw('anno_stampa, COUNT(*) as numero')
             ->groupBy('anno_stampa')
+            ->orderByDesc('numero')
+            ->limit(10)
+            ->get();
+    }
+
+    private function getAutoriFilter($ids) {
+        return Autore::select(['autori.id_autore', 'autori.autore'])
+            ->selectRaw('COUNT(*) as numero')
+            ->join('libri_autori', 'autori.id_autore', '=', 'libri_autori.id_autore')
+            ->whereIn('libri_autori.ISBN', $ids)
+            ->groupBy('autori.id_autore', 'autori.autore')
             ->orderByDesc('numero')
             ->limit(10)
             ->get();

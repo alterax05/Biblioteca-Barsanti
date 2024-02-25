@@ -3,51 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\Autore;
-use App\Models\DaFare;
 use App\Models\Editore;
 use App\Models\Genere;
-use App\Models\Libri_Autori;
-use App\Models\Libri_Generi;
 use App\Models\Libro;
 use App\Models\Preferiti;
 use App\Models\Proposta;
-use App\Models\Scheda_Autore;
 use App\Models\Tracker;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Reparto;
-use Illuminate\Support\Facades\Storage;
 
 class IndexController extends Controller
 {
     public function index() {
 
-        Tracker::hit();
+        if($_SERVER['REMOTE_ADDR'] != '127.0.0.1'){
+            Tracker::hit();
+        }
 
-        $autori_bacheca = DB::table('autori_bacheca')
-            ->join('autori', 'autori.id_autore', 'autori_bacheca.id_autore')
-            ->leftJoin('schede_autori', 'schede_autori.id_autore', 'autori_bacheca.id_autore')
-            ->orderByDesc('created_at')
-            ->get();
 
+        $autori_bacheca = Autore::selectRaw('autori.id_autore, autori.autore, autori_bacheca.subtitle, schede_autori.location')
+            ->join('autori_bacheca', 'autori.id_autore', 'autori_bacheca.id_autore')
+            ->join('schede_autori', 'schede_autori.id_autore', 'autori_bacheca.id_autore')
+            ->get(); 
+
+            
         foreach($autori_bacheca as $autore) {
-            $autore->libri = Libri_Autori::where('libri_autori.id_autore', $autore->id_autore)
-                ->join('autori', 'autori.id_autore', 'libri_autori.id_autore')
-                ->join('libri', 'libri.ISBN', 'libri_autori.ISBN')
-                ->orderByDesc('libri.anno_stampa')
-                ->limit(4)
+            //TODO Undefined
+            $autore->libri = Autore::find($autore->id_autore)
+                ->belongsLibri()
+                ->orderByDesc('anno_stampa')
+                ->take(4)
                 ->get();
         }
 
-        $reparti = Reparto::where('id_reparto', '>', 0)
-            ->selectRaw('reparti.id_reparto,
-            reparti.reparto,
-            reparti.icon,
-            (SELECT COUNT(*) FROM libri WHERE libri.reparto = reparti.id_reparto GROUP BY libri.reparto) numeri')
-            ->orderByDesc('numeri')
-            ->get();
+        $reparti = Reparto::select(['id_reparto', 'reparto', 'icon'])
+                    ->selectRaw('(SELECT COUNT(*) FROM libri WHERE libri.reparto = reparti.id_reparto GROUP BY libri.reparto) as numeri')
+                    ->orderByDesc('numeri')
+                    ->get();
 
         $carousel = DB::table('carousel')->get();
 
@@ -90,6 +84,7 @@ class IndexController extends Controller
         $authors = [];
 
         $prop = Proposta::where('user', Auth::id())->where('ISBN', $ISBN)->first();
+
         if($prop != null) {
             return redirect('/proponi')->withErrors(['ISBN' => 'error']);
         }
@@ -130,11 +125,7 @@ class IndexController extends Controller
                     foreach ($details['volumeInfo']['categories'] as $category) {
 
                         $genere = Genere::firstOrCreate(['genere' => $category]);
-                        Libri_Generi::create([
-                            'ISBN' => $ISBN,
-                            'id_genere' => $genere->id_genere
-                        ]);
-
+                        $libro->belongsGeneri()->attach($genere->id_genere);
                     }
             }
         }
@@ -142,10 +133,7 @@ class IndexController extends Controller
         foreach($authors as $author) {
             $autore = Autore::firstOrCreate(['autore' => $author]);
 
-            Libri_Autori::create([
-                'id_autore' => $autore->id_autore,
-                'ISBN' => $ISBN
-            ]);
+            $libro->belongsAutori()->attach($autore->id_autore);
         }
 
         Proposta::create([
@@ -161,16 +149,14 @@ class IndexController extends Controller
     public function autori($lettera) {
         $lettere = ['A','B','C','D','E','F','G','H','I','K','J','L','M','N','O','P','Q','R','S','T','U','V','Z'];
 
-        $autori = Libri_Autori::where('libri_autori.id_autore', '>', 0)
-            ->join('autori', 'autori.id_autore', 'libri_autori.id_autore')
-            ->whereRaw("autori.autore LIKE '" . $lettera . "%'")
-            ->selectRaw('libri_autori.id_autore, autori.autore, COUNT(libri_autori.id_autore) AS libri')
-            ->groupBy('libri_autori.id_autore')
-            ->orderBy('autori.autore')
+        $autori = Autore::where('autore', 'LIKE', $lettera . '%')
+            ->SelectRaw('id_autore, autore, (SELECT COUNT(*) FROM libri_autori WHERE libri_autori.id_autore = autori.id_autore) AS libri')
+            ->orderBy('autore')
             ->get();
-
+        
         return view('autori')
             ->with('lettera', $lettera)
+            //Divide the array in 3 parts to display them in 3 columns
             ->with('autori', $this->partition($autori->toArray(), 3))
             ->with('lettere', $lettere);
     }
@@ -188,14 +174,15 @@ class IndexController extends Controller
                     'ISBN' => $libro->ISBN
                 ]);
             else
-                $preferiti->delete([]);
+                $preferiti->delete();
         }
         return back();
     }
 
-    function partition( $list, $p ) {
+    //Divide an array in $p parts
+    function partition(array $list, int $p ) {
         $listlen = count( $list );
-        $partlen = floor( $listlen / $p );
+        $partlen = intval(floor( $listlen / $p ));
         $partrem = $listlen % $p;
         $partition = array();
         $mark = 0;

@@ -105,7 +105,7 @@
                 <div class="d-flex">
                     <img :src="'/imgs/authors/'+scheda_autore.id_autore+'.webp'">
                     <div class="author d-flex flex-column">
-                        <p v-html="scheda_autore.belongs_autore.autore"></p>
+                        <p v-html="scheda_autore.autore"></p>
                         <div class="d-flex flex-row">
                             <label v-html="scheda_autore.location + ' - ' + scheda_autore.anno_nascita"></label>
                             <label v-if="scheda_autore.anno_morte != 0" v-html="', ' + scheda_autore.anno_morte"></label>
@@ -149,7 +149,7 @@
                 <div class="libro row cc-card spacer-card" v-for="book in books" :key="book.ISBN">
                     <div class="col-3">
                         <a :href="'/book/'+book.ISBN">
-                            <img onerror="imgError(this)" :src="'/imgs/covers/'+ book.ISBN + '.jpg'" alt="cover">
+                            <img onerror="imgError(this)" :src="'/covers/'+ book.ISBN + '.webp'" alt="cover">
                         </a>
                     </div>
                     <div class="col-9 row">
@@ -157,7 +157,7 @@
                             <p class=""><a :href="'/book/'+book.ISBN" v-html="book.titolo"></a></p>
                             <p v-if="book.belongs_autori.length !== 0">
                                 di
-                                <a v-for="autoreF in book.belongs_autori" :key="autoreF.id_autore" @click="clearFilters(); change(() => autore = autoreF.id_autore, 'autore', autoreF.id_autore)" v-html="autoreF.belongs_autore.autore + ' '"></a>
+                                <a v-for="autoreF in book.belongs_autori" :key="autoreF.id_autore" @click="clearFilters(); change(() => autore = autoreF.id_autore, 'autore', autoreF.id_autore)" v-html="autoreF.autore + ' '"></a>
                             </p>
                             <p><a @click="clearFilters(); change(() => editore = book.belongs_editore.id_editore, 'editore', book.belongs_editore.id_editore)" v-html="book.belongs_editore.editore"></a>, <span v-html="book.anno_stampa"></span></p>
 
@@ -172,10 +172,10 @@
                                 </div>
                             </div>
 
-                                <div class="genere" v-if="book.belongs_autori[0] && book.belongs_autori[0].belongs_autore.belongs_scheda != null && book.belongs_autori[0].belongs_autore.belongs_scheda.nobel != null">
+                                <div class="genere" v-if="book.belongs_autori[0] && book.belongs_autori[0].belongs_scheda != null && book.belongs_autori[0].belongs_scheda.nobel != null">
                                     <div class="d-flex flex-row">
-                                        <img data-bs-toggle="tooltip" data-bs-placement="top" :title="book.belongs_autori[0].belongs_autore.belongs_scheda.belongs_nazione.nazione" class="flag-nobel" :src="'/imgs/flags/' + book.belongs_autori[0].belongs_autore.belongs_scheda.belongs_nazione.tag + '.png'">
-                                        <label>Nobel per la Letteratura <b v-html="book.belongs_autori[0].belongs_autore.belongs_scheda.nobel"></b></label>
+                                        <img data-bs-toggle="tooltip" data-bs-placement="top" :title="book.belongs_autori[0].belongs_scheda.belongs_nazione.nazione" class="flag-nobel" :src="'/imgs/flags/' + book.belongs_autori[0].belongs_scheda.belongs_nazione.tag + '.png'">
+                                        <label>Nobel per la Letteratura <b v-html="book.belongs_autori[0].belongs_scheda.nobel"></b></label>
                                     </div>
                                 </div>
 

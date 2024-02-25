@@ -10,7 +10,7 @@
 @section('content')
     <div class="container row" style="margin: 0 auto; max-width: 1200px;">
         <div class="col-4">
-            <img onerror="imgError(this)" style="width: 100%; border: solid 1px #c4c4c4;" src="https://pictures.abebooks.com/isbn/{{ $libro->ISBN }}-us-300.jpg" alt="cover">
+            <img onerror="imgError(this)" style="width: 100%; border: solid 1px #c4c4c4;" src="/covers/{{$libro->ISBN}}" alt="cover">
         </div>
         <div class="col-8" style="margin-bottom: 40px;">
             <div class="col-lg-12 row">
@@ -19,7 +19,7 @@
                     <p>{{ $libro->titolo }}</p>
                     <p>{{ __('book.of') }}
                         @foreach($libro->belongsAutori as $autore)
-                            <a href="/search/autore/{{ $autore->belongsAutore->id_autore }}/?page=1">{{ $autore->belongsAutore->autore }}</a>
+                            <a href="/search/autore/{{ $autore->id_autore }}/?page=1">{{ $autore->autore }}</a>
                         @endforeach
                     </p>
                     <p class="edizione"><a href="/search?editore={{ $libro->belongsEditore->id_editore }}&page=1">{{ $libro->belongsEditore->editore }}</a>, {{ $libro->anno_stampa }}</p>
@@ -120,7 +120,7 @@
                         <div class="autori-bacheca">
                             <img class="img-autori" src="/imgs/authors/{{ $scheda->id_autore }}.webp">
                             <div>
-                                <p>{{ __('book.discover')  }} {{ $autore->belongsAutore->autore }} ({{ $scheda->location }})</p>
+                                <p>{{ __('book.discover')  }} {{ $autore->autore }} ({{ $scheda->location }})</p>
                                 <a href="/search/autore/{{ $autore->id_autore }}">{{ __('book.show_all') }}</a>
                             </div>
                         </div>

@@ -16,9 +16,9 @@ return new class extends Migration
         }
 
         Schema::create('preferiti', function (Blueprint $table) {
-            $table->foreignId('id')->constrained('users');
+            $table->foreignId('id_user')->constrained('users');
             $table->foreignId('ISBN')->constrained('libri', 'ISBN');
-            $table->primary(['id', 'ISBN']);
+            $table->primary(['id_user', 'ISBN']);
         });
     }
 
