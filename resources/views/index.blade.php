@@ -66,7 +66,7 @@
                             @foreach($autore->libri as $libro)
                             <div class="col-3">
                                 <a href="/book/{{ $libro->ISBN }}">
-                                    <img style="width: 100%;" onerror="imgError(this)" src="/covers/{{ $libro->ISBN }}">
+                                    <img style="width: 100%;"  src="/covers/{{ $libro->ISBN }}">
                                 </a>
                             </div>
                             @endforeach

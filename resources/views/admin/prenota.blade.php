@@ -6,7 +6,7 @@
             <div class="libro row cc-card spacer-card">
                 <div class="col-2">
                     <a href="/book/{{$libro->ISBN}}">
-                        <img style="width: 100%" onerror="imgError(this)" src="https://pictures.abebooks.com/isbn/{{ $libro->ISBN }}-us-300.jpg" alt="cover">
+                        <img style="width: 100%"  src="/covers/{{ $libro->ISBN }}" alt="cover">
                     </a>
                 </div>
                 <div class="col-9 row">
@@ -15,7 +15,7 @@
                         <p>@if(count($libro->belongsAutori) != 0)
                                 di
                                 @foreach($libro->belongsAutori as $autore)
-                                    <a href="/search/autore/{{ $autore->belongsAutore->id_autore }}?page=1">{{ $autore->belongsAutore->autore }}</a>
+                                    <a href="/search/autore/{{ $autore->id_autore }}?page=1">{{ $autore->autore }}</a>
                                 @endforeach
                             @endif
                         </p>

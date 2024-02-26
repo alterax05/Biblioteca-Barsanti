@@ -3,13 +3,24 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Autore extends Model
 {
+
+    use Searchable;
     protected $table = 'autori';
     protected $primaryKey = 'id_autore';
     protected $fillable = ['autore'];
-    protected $timestamp = false;
+    public $timestamps = false;
+
+    public function toSearchableArray()
+    {
+        $array = ['autore' => $this->autore];
+
+        return $array;
+    }
+
 
     public function belongsScheda() {
         return $this->belongsTo(Scheda_Autore::class, 'id_autore');

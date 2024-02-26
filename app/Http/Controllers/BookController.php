@@ -16,8 +16,10 @@ class BookController extends Controller
         $libro = Libro::where('ISBN', $id_book)
             ->first();
         $copie = Copia::where('ISBN', $id_book)
-            ->join('condizioni', 'condizioni.id', 'copie.condizioni')
+            ->join('condizioni', 'condizioni.id_condizioni', 'copie.condizioni')
+            ->leftJoin('prestiti', 'prestiti.id_copia', 'copie.id_copia')
             ->selectRaw('copie.*, condizioni.condizioni, (SELECT COUNT(*) FROM prestiti WHERE id_copia = copie.id_copia AND data_fine IS NULL) prestiti')
+            ->whereNull('prestiti.id_copia')
             ->get();
 
         $punteggio  = 0;

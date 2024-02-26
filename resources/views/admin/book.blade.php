@@ -5,7 +5,7 @@
     <div class="cc-card filter-card">
         <div class="row">
             <div class="col-4">
-                <img class="book-cover" src="covers/{{ $libro->ISBN }}" style="width: 100%;">
+                <img class="book-cover" src="/covers/{{ $libro->ISBN }}" style="width: 100%;">
             </div>
             <div class="col-8">
                 <h5 style="margin-top: 20px;">Titolo: {{ $libro->titolo }}</h5>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-6">
                     <label>Inserisci il codice inventario</label>
-                    <input name="codice" type="text" value="{{ $libro->id_libro }}" style="width: 100%; padding: 3px 20px;" required>
+                    <input name="codice" type="text" value="{{ $libro->num_copia }}" style="width: 100%; padding: 3px 20px;" required>
                 </div>
             </div>
 

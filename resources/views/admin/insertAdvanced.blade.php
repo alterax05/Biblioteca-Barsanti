@@ -28,16 +28,37 @@
                 </div>
             </div>
 
-            <div class="input-wrapper row">
-                <div class="col-6">
+            <div class="input-wrapper row" x-data="autoreDropdown()">
+                
+                <div class="col-6" @click.away="autori = null">
                     <label>Seleziona l'autore</label>
                     <div style="position: relative">
-                        <ListaAutori />
+                        <input 
+                            x-model="autore" 
+                            @input="update" 
+                            id="autore" 
+                            name="autore" 
+                            type="text" 
+                            style="width: 100%; padding: 3px 20px;" 
+                            required 
+                            autocomplete="off"
+                        >
+                        <ul class="search-list" x-show="autori && autori.length">
+                            <template x-for="(row, index) in autori" :key="index">
+                                <li @click="changeValue(row.autore)">
+                                    <div class="option-search">
+                                        <div class="col-lg-12">
+                                            <p x-html="row.autore"></p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </template>
+                        </ul>
                     </div>
                 </div>
 
                 <div class="col-6">
-                    <label>Seleziona le sue condizioni</label>
+                    <label>Seleziona l'editore</label>
                     <select name="editore" class="form-select" style="width: 100%; height: min-content;" required>
                         @foreach($editori as $editore)
                             <option value="{{ $editore->id_editore }}">{{ $editore->editore }}</option>
@@ -122,4 +143,35 @@
         }
     </style>
 
+@endsection
+
+@section('script')
+    <script>
+        function autoreDropdown() {
+            return {
+                autore: '',
+                autori: null,
+                update(event) {
+                    const value = event.target.value;
+
+                    if (value.length > 2) {
+                        fetch(`/api/autori/${value.replace(" ", "-")}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                this.autori = data;
+                            })
+                            .catch(error => {
+                                console.error(error);
+                            });
+                    } else {
+                        this.autori = null;
+                    }
+                },
+                changeValue(value) {
+                    this.autore = value;
+                    this.autori = null;
+                }
+            }
+        }
+    </script>
 @endsection

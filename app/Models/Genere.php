@@ -13,6 +13,6 @@ class Genere extends Model
     public $timestamps = false;
 
     public function belongsLibri() {
-        return $this->belongsToMany(Libro::class, 'libri_generi', 'ISBN', 'id_genere');
+        return $this->belongsToMany(Libro::class, 'libri_generi', 'id_genere', 'ISBN');
     }
 }

@@ -8,5 +8,6 @@ class Prestito extends Model
 {
     protected $table = 'prestiti';
     protected $primaryKey = 'id_prestito';
-    protected $fillable = ['libro', 'user', 'ISBN', 'data_inizio', 'data_fine'];
+    protected $fillable = ['id_copia', 'id_user', 'ISBN', 'data_inizio', 'data_fine'];
+    public $timestamps = false;
 }

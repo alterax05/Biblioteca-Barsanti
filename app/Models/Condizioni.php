@@ -9,4 +9,8 @@ class Condizioni extends \Illuminate\Database\Eloquent\Model
     protected $keyType = 'tinyint';
     protected $fillable = ['condizioni'];
     public $timestamps = false;
+    protected $casts = [
+        'id_condizioni' => 'int',
+        'condizioni' => 'string'
+    ];
 }

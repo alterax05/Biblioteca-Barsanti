@@ -66,12 +66,12 @@ class ApiController extends Controller
             return response()->json(['error' => 'Libro non trovato'], 404);
 
         $libro->copie = Copia::where('copie.ISBN', $ISBN)
-            ->whereRaw("(SELECT COUNT(*) FROM prestiti WHERE prestiti.libro = copie.id_libro) < 1")
+            ->whereRaw("(SELECT COUNT(*) FROM prestiti WHERE prestiti.id_copia = copie.id_copia) < 1")
             ->get();
 
 
         foreach($libro->copie as $copia) {
-            $copia->prenotato = Prenotazione::where('id_copia', $copia->id_libro)
+            $copia->prenotato = Prenotazione::where('id_copia', $copia->id_copia)
                 ->join('users', 'prenotazioni.user', 'users.id')
                 ->get();
         }
@@ -82,10 +82,10 @@ class ApiController extends Controller
     public function restituisci($ISBN) {
 
         $libro = Prestito::where('copie.ISBN', $ISBN)
-            ->selectRaw('libri.titolo, prestiti.libro, CONCAT(users.name, " ", users.surname) as utente')
-            ->leftjoin('copie', 'copie.id_copia', 'prestiti.id_copia')
+            ->selectRaw('libri.titolo, copie.num_copia, CONCAT(users.name, " ", users.surname) as utente, copie.id_copia')
+            ->join('copie', 'copie.id_copia', 'prestiti.id_copia')
             ->join('libri', 'libri.ISBN', '=','copie.ISBN')
-            ->join('users', 'users.id', '=', 'prestiti.id:user')
+            ->join('users', 'users.id', '=', 'prestiti.id_user')
             ->whereNull('prestiti.data_fine')   
             ->get();
 
@@ -118,11 +118,13 @@ class ApiController extends Controller
             $rec = Recensione::create([
                 'ISBN' => $request->input('ISBN'),
                 'user' => Auth::id(),
+                'punteggio' => $request->input('punteggio'),
             ]);
+        }else{
+            $rec->punteggio = $request->input('punteggio');
+            $rec->save();
         }
 
-        $rec->punteggio = $request->input('punteggio');
-        $rec->save();
 
         return "Recensione salvata!";
     }
@@ -183,14 +185,34 @@ class ApiController extends Controller
             $books = $books->where('editore', $editore);
 
         if($autore != "0" && $autore != "undefined" ) {
-            $ids = Autore::select('ISBN')->belongsLibri()->where('id_autore', $autore)->get();
-            $books = $books->whereIn('libri.ISBN', $ids);
+            $ids = Autore::find($autore)
+                ->belongsLibri()
+                ->select("libri.ISBN")
+                ->get()
+                ->toArray();
+
+            $ISBN = [];
+            foreach($ids as $id) {
+                $ISBN[] = $id['ISBN'];
+            }
+
+            $books = $books->whereIn('libri.ISBN', $ISBN);
         }
 
         if($genere != "0" && $genere != "undefined" ) {
             
-            $ids = Genere::select('ISBN')->belongsLibri()->where('id_genere', $genere)->get();
-            $books = $books->whereIn('libri.ISBN', $ids);
+            $ids = Genere::find($genere)
+                ->belongsLibri()
+                ->select("libri.ISBN")
+                ->get()
+                ->toArray();
+
+            $ISBN = [];
+            foreach($ids as $id) {
+                $ISBN[] = $id['ISBN'];
+            }
+
+            $books = $books->whereIn('libri.ISBN', $ISBN);
         }
 
         if($sezione != "0" && $sezione != "undefined" ) {
@@ -206,8 +228,8 @@ class ApiController extends Controller
 
 
         $ids = [];
-        $test1= $books->get();
-        foreach($test1 as $libro) {
+        $ISBN = $books->get();
+        foreach($ISBN as $libro) {
             $ids[] = $libro->ISBN;
         }
 
@@ -247,7 +269,7 @@ class ApiController extends Controller
                 $books = $books->orderByDesc('copie');
                 break;
             case 'prestati':
-                $books = $books->selectRaw(' (SELECT COUNT(*) FROM prestiti INNER JOIN copie ON prestiti.libro = copie.id_libro WHERE copie.ISBN = copie.ISBN) +
+                $books = $books->selectRaw(' (SELECT COUNT(*) FROM prestiti INNER JOIN copie ON prestiti.id_copia = copie.id_copia WHERE copie.ISBN = copie.ISBN) +
                     (SELECT SUM(copie.prestati) FROM copie WHERE copie.ISBN = libri.ISBN GROUP BY copie.ISBN) prestitiTotali')
                     ->orderByDesc('prestitiTotali');
                 break;

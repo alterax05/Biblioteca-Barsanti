@@ -3,13 +3,29 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Libro extends Model
 {
+
+    use Searchable;
+
     protected $table = 'libri';
     protected $primaryKey = 'ISBN';
     protected $fillable = ['ISBN', 'titolo', 'descrizione', 'editore', 'anno_stampa', 'pagine', 'altezza', 'lingua', 'reparto'];
-    const UPDATED_AT = null;
+    public $timestamps = false;
+
+    public function toSearchableArray()
+    {
+        $array = [
+            'ISBN' => $this->ISBN,
+            'titolo' => $this->titolo,
+            'anno_stampa' => $this->anno_stampa,
+            'lingua' => $this->lingua,
+            'reparto' => $this->reparto];
+
+        return $array;
+    }
 
     public function belongsEditore() {
         return $this->belongsTo(Editore::class, 'editore');
@@ -20,7 +36,7 @@ class Libro extends Model
     }
 
     public function belongsGeneri() {
-        return $this->belongsToMany(Genere::class, 'libri_generi', 'id_genere', 'ISBN');
+        return $this->belongsToMany(Genere::class, 'libri_generi', 'ISBN', 'id_genere');
     }
 
     public function belongsLingua() {
@@ -45,7 +61,7 @@ class Libro extends Model
                 $row['Titolo']    = $prestito->titolo;
                 $row['Autori']  = "";
                 foreach($prestito->belongsAutori as $autore)
-                    $row['Autori']  .= $autore->belongsAutore->autore . ', ';
+                    $row['Autori']  .= $autore->autore . ', ';
 
                 $row['Anno']  = $prestito->anno_stampa;
                 $row['Editore']  = $prestito->belongsEditore->editore;

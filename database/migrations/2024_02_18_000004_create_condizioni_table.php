@@ -17,7 +17,7 @@ return new class extends Migration
         }
         
         Schema::create('condizioni', function (Blueprint $table) {
-            $table->tinyIncrements('id');
+            $table->tinyIncrements('id_condizioni');
             $table->string('condizioni');
         });
     }

@@ -149,7 +149,7 @@
                 <div class="libro row cc-card spacer-card" v-for="book in books" :key="book.ISBN">
                     <div class="col-3">
                         <a :href="'/book/'+book.ISBN">
-                            <img onerror="imgError(this)" :src="'/covers/'+ book.ISBN + '.webp'" alt="cover">
+                            <img  :src="'/covers/'+ book.ISBN" alt="cover">
                         </a>
                     </div>
                     <div class="col-9 row">
@@ -178,11 +178,10 @@
                                         <label>Nobel per la Letteratura <b v-html="book.belongs_autori[0].belongs_scheda.nobel"></b></label>
                                     </div>
                                 </div>
-
                                 <div class="genere" v-if="book.belongs_generi !== 0">
                                     <p>{{ __('catalogue.generi') }}:</p>
                                     <div class="d-flex flex-column">
-                                        <a v-for="genereF in book.belongs_generi" :key="genereF.id_genere" @click="clearFilters(); change(() => genere = genereF.id_genere, 'genere', genereF.id_genere)" v-html="genereF.belongs_genere.genere"></a>
+                                        <a v-for="genereF in book.belongs_generi" :key="genereF.id_genere" @click="clearFilters(); change(() => genere = genereF.id_genere, 'genere', genereF.id_genere)" v-html="genereF.genere"></a>
                                     </div>
                                 </div>
                         </div>

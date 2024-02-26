@@ -65,7 +65,7 @@ class IndexController extends Controller
 
         $proposte = Libro::where('libri.ISBN', '>', 0)
             ->leftJoin('proposte', 'libri.ISBN', 'proposte.ISBN')
-            ->where('proposte.user', Auth::id())
+            ->where('proposte.id_user', Auth::id())
             ->selectRaw("*, (SELECT COUNT(ISBN) FROM proposte WHERE proposte.ISBN = libri.ISBN) proposte")
             ->orderByDesc('proposte')
             ->get();

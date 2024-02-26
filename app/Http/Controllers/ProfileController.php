@@ -15,7 +15,7 @@ class ProfileController
 
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
             ->where('user', Auth()->id())
             ->get();
 
@@ -57,7 +57,7 @@ class ProfileController
 
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
             ->whereNotNull('prestiti.data_restituzione')
             ->where('user', Auth()->id())
             ->get();
@@ -71,7 +71,7 @@ class ProfileController
 
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prenotazioni', 'copie.id_libro', 'prenotazioni.id_copia')
+            ->join('prenotazioni', 'copie.id_copia', 'prenotazioni.id_copia')
             ->where('user', Auth()->id())
             ->get();
 
@@ -85,7 +85,7 @@ class ProfileController
 
         $prestiti = Copia::where('copie.ISBN', '>', 0)
             ->join('libri', 'libri.ISBN', 'copie.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
             ->get();
 
         $headers = array(

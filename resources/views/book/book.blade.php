@@ -10,7 +10,7 @@
 @section('content')
     <div class="container row" style="margin: 0 auto; max-width: 1200px;">
         <div class="col-4">
-            <img onerror="imgError(this)" style="width: 100%; border: solid 1px #c4c4c4;" src="/covers/{{$libro->ISBN}}" alt="cover">
+            <img  style="width: 100%; border: solid 1px #c4c4c4;" src="/covers/{{$libro->ISBN}}" alt="cover">
         </div>
         <div class="col-8" style="margin-bottom: 40px;">
             <div class="col-lg-12 row">
@@ -29,7 +29,7 @@
                             <p>{{ __('book.generi') }}:</p>
                             <div class="d-flex flex-column">
                                 @foreach($libro->belongsGeneri as $genere)
-                                    <a style="width: fit-content;" href="/search?genere={{ $genere->belongsGenere->id_genere }}&page=1">{{ $genere->belongsGenere->genere }}</a>
+                                    <a style="width: fit-content;" href="/search?genere={{ $genere->id_genere }}&page=1">{{ $genere->genere }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                             </div>
                             @foreach($copie as $copia)
                                 <div class="prestato row riga">
-                                    <p class="col-2">{{ $copia->id_libro }} @if($copia->da_catalogare == 1)({{ __('book.provvisorio') }})@endif</p>
+                                    <p class="col-2">{{ $copia->num_copia }} @if($copia->da_catalogare == 1)({{ __('book.provvisorio') }})@endif</p>
                                     <p class="col-3" style="font-size: 13px;"><b>{{ __('book.scaffale') }}</b> {{ $copia->scaffale }} <b>{{ __('book.ripiano') }}</b> {{ $copia->ripiano }}</p>
                                     <p class="col-2">{{ $copia->prestati }} {{ __('book.times') }}</p>
                                     <p class="col-3">{{ $copia->condizioni }}</p>
@@ -128,7 +128,7 @@
                         <div class="row">
                             @foreach($libri as $libro)
                                 <div class="col-3">
-                                    <img onerror="imgError(this)" src="/covers/{{ $libro->ISBN }}">
+                                    <img  src="/covers/{{ $libro->ISBN }}">
                                 </div>
                             @endforeach
                         </div>
@@ -165,7 +165,7 @@
                         <label>{{ __('book.inventory_code') }}</label>
                         <select class="form-select" name="id_copia">
                             @foreach($copie as $copia)
-                                <option value="{{ $copia->id_libro }}">{{ $copia->id_libro }} - ({{ __('book.scaffale_down') }}: {{ $copia->scaffale }}, {{ __('book.ripiano_down') }}: {{ $copia->ripiano }})</option>
+                                <option value="{{ $copia->id_copia }}">{{ $copia->num_copia }} - ({{ __('book.scaffale_down') }}: {{ $copia->scaffale }}, {{ __('book.ripiano_down') }}: {{ $copia->ripiano }})</option>
                             @endforeach
                         </select>
                     </div>

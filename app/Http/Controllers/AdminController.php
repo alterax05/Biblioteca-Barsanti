@@ -41,14 +41,15 @@ class AdminController extends Controller
     }
 
     public function book($ISBN, $codice) {
-        $libro = Copia::where('id_libro', $codice)
+
+        $libro = Copia::where('num_copia', $codice)
             ->join('libri', 'libri.ISBN', 'copie.ISBN')
             ->where('copie.ISBN', $ISBN)
             ->first();
 
-        $autori = Copia::all()->belongsAutori()->where('copie.ISBN', $ISBN)->get();
+        $autori = Libro::find($ISBN)->belongsAutori()->get();
 
-        $autoriAll = Autore::all()->orderBy('autore')->get();
+        $autoriAll = Autore::orderBy('autore')->get();
 
         return view('admin.book')
             ->with('autori', $autori)
@@ -57,12 +58,12 @@ class AdminController extends Controller
     }
 
     public function prestiti() {
-        $prestiti = Libro::where('libri.ISBN', '>', 0)
+        $prestiti = Libro::select()
             ->leftJoin('copie', 'libri.ISBN', 'copie.ISBN')
-            ->rightJoin('prestiti', 'prestiti.libro', 'copie.id_libro')
-            ->join('users', 'users.id', 'prestiti.user')
-            ->whereNull('prestiti.data_restituzione')
-            ->orderByDesc('prestiti.data_prestito')
+            ->rightJoin('prestiti', 'prestiti.id_copia', 'copie.id_copia')
+            ->join('users', 'users.id', 'prestiti.id_user')
+            ->whereNull('prestiti.data_fine')
+            ->orderByDesc('prestiti.data_inizio')
             ->get();
         return view('admin.prestiti')
             ->with('prestiti', $prestiti);
@@ -71,7 +72,7 @@ class AdminController extends Controller
     public function prenota() {
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->leftJoin('copie', 'libri.ISBN', 'copie.ISBN')
-            ->rightJoin('prenotazioni', 'prenotazioni.id_copia', 'copie.id_libro')
+            ->rightJoin('prenotazioni', 'prenotazioni.id_copia', 'copie.id_copia')
             ->join('users', 'users.id', 'prenotazioni.user')
             ->orderByDesc('prenotazioni.created_at')
             ->get();
@@ -94,9 +95,8 @@ class AdminController extends Controller
         $user = User::where('id', $request->input('user'))->first();
 
         Prestito::create([
-            'libro' => $request->input('copia'),
-            'user' => $user->id,
-            'ISBN' => $request->input('ISBN')
+            'id_copia' => $request->input('copia'),
+            'id_user' => $user->id,
         ]);
 
         Prenotazione::where('user', $user->id)->where('id_copia', $request->input('copia'))->delete();
@@ -106,10 +106,13 @@ class AdminController extends Controller
 
     public function completi() {
 
-        $libri = Copia::where('copie.ISBN', '>', 0)
+        $libri = Copia::select(["libri.*", "copie.da_catalogare", "copie.num_copia"])
             ->join('libri', 'copie.ISBN', 'libri.ISBN')
-            ->selectRaw('libri.ISBN, libri.titolo, copie.id_libro')
-            ->whereRaw('(select COUNT(*) from libri_autori where libri_autori.ISBN = copie.ISBN) = 0 or copie.id_libro < 100')->get();
+            ->leftJoin('libri_autori', 'libri.ISBN', 'libri_autori.ISBN')
+            ->whereNull('libri_autori.ISBN')
+            ->orWhere('copie.da_catalogare', 1)
+            ->get();
+        
 
         return view('admin.completi')
             ->with('libri', $libri);
@@ -129,10 +132,8 @@ class AdminController extends Controller
             "Pragma"              => "no-cache",
             "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
             "Expires"             => "0"
-        );
-
-        return response()->stream(Libro::generate($fileName, $prestiti), 200, $headers);
-
+        );        
+        return response()->download(Libro::generate($fileName, $prestiti), $headers);
     }
 
     public function authors(Request $request, $ISBN) {
@@ -146,11 +147,11 @@ class AdminController extends Controller
     }
 
     public function insertGet() {
-        $condizioni = Condizioni::where('id_condizioni', '>', '0')
+        $condizioni = Condizioni::select()
             ->orderBy('id_condizioni')
             ->get();
 
-        $da_fare = DaFare::where('id_libro', '>', '0')->orderByDesc('id_Libro')->get();
+        $da_fare = DaFare::select()->orderByDesc('id_copia')->get();
         $reparti = Reparto::all();
 
         return view('admin.insert')
@@ -160,7 +161,7 @@ class AdminController extends Controller
     }
 
     public function indexAdvanced() {
-        $condizioni = Condizioni::all()
+        $condizioni = Condizioni::select()
             ->orderBy('id_condizioni')
             ->get();
 
@@ -208,7 +209,8 @@ class AdminController extends Controller
                 'pagine' => 0,
                 'altezza' => "",
                 'lingua' => $request->input('lingua'),
-                'reparto' => $request->input('reparto')
+                'reparto' => $request->input('reparto'),
+                'descrizione' => ''
             ]);
         }catch(Exception $e) {
             return redirect('/admin/insert/advanced')->withErrors(['anno_stampa' => 'L\'anno dev\'essere con 4 cifre']);
@@ -222,6 +224,7 @@ class AdminController extends Controller
                 'ripiano' => $request->input('ripiano'),
                 'prestati' => $request->input('prestati'),
                 'condizioni' => $request->input('condizioni'),
+                'da_catalogare' => 1
             ]);
         }catch(Exception $e) {
             return redirect('/admin/insert/advanced')->withInput()->withErrors([
@@ -231,8 +234,10 @@ class AdminController extends Controller
         }
 
         try {
-            $libro->belongsAutori()->attach($request->input('autore'));
-            $libro->belongsGeneri()->attach($request->input('genere'));
+            $autore = Autore::firstOrCreate(['autore' => $request->input('autore')]);
+            $libro->belongsAutori()->attach($autore->id_autore);
+            $genere = Genere::firstOrCreate(['genere' => $request->input('genere')]);
+            $libro->belongsGeneri()->attach($genere->id_genere);
         }catch(Exception $e) {
             return redirect('/admin/insert/advanced')->withInput();
         }
@@ -331,7 +336,6 @@ class AdminController extends Controller
 
                 if(in_array('categories', array_keys($details['volumeInfo'])))
                     foreach ($details['volumeInfo']['categories'] as $category) {
-
                         $genere = Genere::firstOrCreate(['genere' => $category]);
                         $libro->belongsGeneri()->attach($genere->id_genere);
                     }
@@ -393,7 +397,7 @@ class AdminController extends Controller
             'libro' => 'required',
         ]);
 
-        $prestito = Prestito::where('prestiti.libro', $request->input('libro'))
+        $prestito = Prestito::where('id_copia', $request->input('libro'))
             ->whereNull('prestiti.data_fine')
             ->first();
 
@@ -408,11 +412,11 @@ class AdminController extends Controller
     }
 
     public function proposte() {
-        $proposte = Libro::where('libri.ISBN', '>', 0)
-            ->leftJoin('proposte', 'libri.ISBN', 'proposte.ISBN')
-            ->where('proposte.user', '>', 0)
-            ->selectRaw("*, (SELECT COUNT(ISBN) FROM proposte WHERE proposte.ISBN = libri.ISBN) proposte")
-            ->groupBy('libri.ISBN')
+        $proposte = Libro::select()
+            ->distinct()
+            ->join('proposte', 'libri.ISBN', 'proposte.ISBN')
+            ->whereNotNull('proposte.id_user')
+            ->selectRaw("(SELECT COUNT(ISBN) FROM proposte WHERE proposte.ISBN = libri.ISBN) proposte")
             ->orderByDesc('proposte')
             ->get();
 
