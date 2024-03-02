@@ -33,9 +33,10 @@ new Vue({
     update: function (event) {
       value = event.target.value;
 
+      let uri = encodeURI("/api/search/" + value);
       if (value != "") {
         axios
-          .get("/api/search/" + value.replace(" ", "-"))
+          .get(uri)
           .then((response) => {
             this.libri = response.data;
           })
@@ -173,12 +174,6 @@ new Vue({
     },
   },
 });
-
-function imgError(image) {
-  image.onerror = "";
-  image.src = "/imgs/notcover-min.png";
-  return true;
-}
 
 function loadUrlParameters(urlstring, param, value) {
   var url = new URL(urlstring);

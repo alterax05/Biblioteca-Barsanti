@@ -9,6 +9,6 @@ class Recensione extends Model {
     protected $table = 'recensioni';
     public $incrementing = false;
     protected $fillable = ['ISBN', 'user', 'punteggio'];
-    protected $primary_key = 'user';
+    protected $primaryKey = 'user';
     public $timestamps = false;
 }

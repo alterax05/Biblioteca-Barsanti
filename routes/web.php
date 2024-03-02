@@ -116,5 +116,5 @@ Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCo
 
 Route::get('/testroute', function() {
     $name = "Funny Coder";
-    Mail::to('giovanni.dequattro@barsanti.edu.it')->send(new Test($name));
+    Mail::to('michele.porcellato@barsanti.edu.it')->send(new Test($name));
 });

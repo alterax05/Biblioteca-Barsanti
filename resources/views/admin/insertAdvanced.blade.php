@@ -155,7 +155,8 @@
                     const value = event.target.value;
 
                     if (value.length > 2) {
-                        fetch(`/api/autori/${value.replace(" ", "-")}`)
+                        let url = encodeURI(`/api/autori/${value}`);
+                        fetch(url)
                             .then(response => response.json())
                             .then(data => {
                                 this.autori = data;

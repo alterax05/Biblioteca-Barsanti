@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fornitore extends Model
 {
-    use HasFactory;
-    protected $primaryKey = 'id_tipologia';
+    protected $primaryKey = 'id_fornitore';
     protected $fillable = ['fornitore', 'icona'];
     public $timestamps = false;
 }

@@ -37,7 +37,7 @@ class Test extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.test.email',
+            view: 'mail.test-email',
             with: ['name' => $this->name],
         );
     }

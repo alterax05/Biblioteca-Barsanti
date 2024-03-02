@@ -42,7 +42,7 @@
                             @endif
                         </div>
                         <div class="col-4 dettagli">
-                            <label class="copie">{{ __('profile.book_il') }}: <b>{{ date("d/m/Y", strtotime($libro->data_prestito)) }}</b></label>
+                            <label class="copie">{{ __('profile.book_il') }}: <b>{{ date("d/m/Y", strtotime($libro->created_at)) }}</b></label>
                         </div>
                     </div>
                 </div>

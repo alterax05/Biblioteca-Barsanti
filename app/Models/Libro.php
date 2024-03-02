@@ -19,10 +19,8 @@ class Libro extends Model
     {
         $array = [
             'ISBN' => $this->ISBN,
-            'titolo' => $this->titolo,
-            'anno_stampa' => $this->anno_stampa,
-            'lingua' => $this->lingua,
-            'reparto' => $this->reparto];
+            'titolo' => $this->titolo
+        ];
 
         return $array;
     }

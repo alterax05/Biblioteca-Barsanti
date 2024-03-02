@@ -21,7 +21,7 @@ class DocumentariController extends Controller
             ->get();
 
         $documentario = Documentari::where('id_documentario', $docum)
-            ->join('fornitori', 'fornitori.id_tipologia', 'documentari.fornitore')
+            ->join('fornitori', 'fornitori.id_fornitore', 'documentari.fornitore')
             ->first();
 
         if($documentario == null)
@@ -73,7 +73,7 @@ class DocumentariController extends Controller
             $documentari->where('tipologia', $reparto);
         }
 
-        $documentari->join('fornitori', 'fornitori.id_tipologia', 'documentari.fornitore');
+        $documentari->join('fornitori', 'fornitori.id_fornitore', 'documentari.fornitore');
         $documentari->orderBy('id_documentario');
         $documentari = $documentari->paginate(9);
 

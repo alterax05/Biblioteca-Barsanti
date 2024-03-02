@@ -19,7 +19,6 @@
                                 @endforeach
                             @endif
                         </p>
-                        <!--<p><a href="?editore={{ $libro->belongsEditore->id_editore }}&page=1">{{ $libro->belongsEditore->editore }}</a>, {{ $libro->anno_stampa }}</p>-->
                         <p style="margin-top: 10px;font-size: 15px;">Prenotato da: {{ $libro->name }} {{ $libro->surname }} (<b>{{$libro->class}}</b>)</p>
                     </div>
                     <div class="col-4 dettagli" style="margin-top: 0;">

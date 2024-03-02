@@ -70,7 +70,7 @@ class AdminController extends Controller
     }
 
     public function prenota() {
-        $prestiti = Libro::where('libri.ISBN', '>', 0)
+        $prestiti = Libro::select(["*", "prenotazioni.created_at as created_at"])
             ->leftJoin('copie', 'libri.ISBN', 'copie.ISBN')
             ->rightJoin('prenotazioni', 'prenotazioni.id_copia', 'copie.id_copia')
             ->join('users', 'users.id', 'prenotazioni.user')
