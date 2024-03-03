@@ -14,8 +14,11 @@ use App\Models\Prenotazione;
 use App\Models\Prestito;
 use App\Models\Recensione;
 use App\Models\Scheda_Autore;
+use App\Models\Admin;
+use App\Mail\LibroPrenotato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Mail;
 
 class ApiController extends Controller
 {
@@ -131,7 +134,6 @@ class ApiController extends Controller
 
     public function prenotazione(Request $request)
     {
-
         $this->validate($request, [
             'id_copia' => 'required|int',
         ]);
@@ -143,6 +145,23 @@ class ApiController extends Controller
                 'id_copia' => $request->input('id_copia'),
                 'user' => Auth::id(),
             ]);
+
+            $emails = Admin::select()
+                ->with('user')
+                ->get()
+                ->pluck('user.email');
+
+            $titolo = $pren->belongsCopia()
+                ->first()
+                ->belongsLibro()
+                ->first()
+                ->titolo;
+            
+            // Send email to all admins
+            foreach ($emails as $email) {
+                Mail::to($email)->send(new LibroPrenotato(Auth::user()->name." ".Auth::user()->surname, $titolo));
+            }
+
         } else {
             return "Copia non disponibile, riprovare!";
         }
