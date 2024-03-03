@@ -52,7 +52,7 @@ class BookReminderEmail extends Mailable
         $utente = new User(['name' => 'Nome utente di esempio']);
         $prestito = new Prestito(['data_scadenza' => Carbon::now()->addWeek()]);
 
-        Mail::to('tuoemailditest@dominio.it')
+        Mail::to('giovanni.dequattro@barsanti.edu.it')
             ->send(new BookReminderEmail($prestito));
     }
 }
