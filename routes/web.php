@@ -1,11 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
-use App\Mail\Test;
-use Illuminate\Support\Facades\Mail;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -113,8 +108,3 @@ Route::get('language/{locale}', function ($locale) {
 });
 
 Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);
-
-Route::get('/testroute', function() {
-    $name = "Funny Coder";
-    Mail::to('michele.porcellato@barsanti.edu.it')->send(new Test($name));
-});
