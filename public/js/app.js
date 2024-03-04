@@ -93,26 +93,32 @@ new Vue({
       this.page = 1;
       $("#orderForm select").val(this.orderby);
 
+      let protocol = document.location.protocol;
+
       history.pushState(
         {},
         null,
         loadUrlParameters(
-          "https://" + document.location.host + "/search",
+          protocol+ "//" + document.location.host + "/search",
           "query",
           this.query
         )
       );
+
       this.loadBooks();
 
-      if (this.scheda_autore != null)
+      if (this.scheda_autore != null) {
         history.pushState(
           {},
           null,
-          "https://" +
+          protocol + "//" +
             document.location.host +
             "/search/autore/" +
             this.scheda_autore.id_autore
         );
+      }
+
+      this.libri = [];
     },
     loadBooks: function () {
       $("#loading").show();
