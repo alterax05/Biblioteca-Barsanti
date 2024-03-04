@@ -207,7 +207,7 @@ class ApiController extends Controller
             if ($query != "NaN" && $query != "undefined") {
                 $ids = Autore::search($query)
                     ->query(function ($builder) {
-                        return $builder->with('libri');  // Assumendo che 'libri' sia il nome della relazione
+                        return $builder->with('belongsLibri');  // Assumendo che 'libri' sia il nome della relazione
                     })
                     ->get()
                     ->flatMap(function ($autore) {
