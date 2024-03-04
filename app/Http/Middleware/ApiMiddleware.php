@@ -2,10 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Admin;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class ApiMiddleware
@@ -19,7 +17,7 @@ class ApiMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Session::token() !== Request::header('X-CSRF-Token'))
+        if (Session::token() !== $request->header('X-CSRF-Token'))
             return "awda";
 
         return $next($request);

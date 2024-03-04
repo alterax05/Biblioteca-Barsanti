@@ -8,12 +8,30 @@
                 <div class="search-fast">
                     <form method="POST" action="/admin/restituisci">
                         @csrf
-                        <label>Inserisci il codice ISBN del libro da restituire</label>
-                        <input @input="rest" type="text" name="isbn" class="form-control" required>
-                        <select v-if="restituisci != null" type="text" name="libro" class="form-select" style="margin-top: 10px;" required>
-                            <option v-for="copia in restituisci" :key="copia.libro + '#'" :value="copia.libro" v-html="copia.titolo + ' - ' + copia.utente"></option>
-                        </select>
-                        <button v-if="restituisci != null && restituisci.length !== 0" type="submit" class="btn-primary btn" style="margin-top: 10px; font-size: 13px;width: 100%;">Restituisci</button>
+                        <div x-data="{
+                                restituisci: null,
+                                rest(isbn) {
+                                    if (isbn.length === 13) {
+                                        fetch(`/api/admin/restituisci/${isbn}`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                this.restituisci = data;
+                                            })
+                                            .catch(error => console.error(error));
+                                    }
+                                }
+                            }">
+                            <label>Inserisci il codice ISBN del libro da restituire</label>
+                            <input @input="rest($event.target.value)" type="text" name="isbn" class="form-control" required>
+                                <template x-if="restituisci !== null">
+                                    <select x-show="restituisci.length > 0" type="text" name="libro" class="form-select" style="margin-top: 10px;" required>
+                                        <template x-for="copia in restituisci" :key="copia.num_copia">
+                                            <option :value="copia.id_copia" x-text="copia.titolo + ' - ' + copia.utente"></option>
+                                        </template>
+                                    </select>
+                                </template>
+                            <button x-show="restituisci !== null && restituisci.length !== 0" type="submit" class="btn-primary btn" style="margin-top: 10px; font-size: 13px; width: 100%;">Restituisci</button>
+                        </div>
                     </form>
                 </div>
                 <ul>
@@ -32,7 +50,4 @@
             @yield('admin-content')
         </div>
     </div>
-@endsection
-@section('script')
-    <script src="/js/admin.js"></script>
 @endsection

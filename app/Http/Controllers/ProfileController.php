@@ -15,8 +15,8 @@ class ProfileController
 
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
-            ->where('user', Auth()->id())
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
+            ->where('id_user', Auth()->id())
             ->get();
 
         return view('auth.profile.index')
@@ -42,11 +42,11 @@ class ProfileController
 
     public function preferiti() {
 
-        $preferiti = Libro::where('libri.ISBN', '>', 0)
+        $preferiti = Libro::select()
+            ->distinct()
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
             ->join('preferiti', 'copie.ISBN', 'preferiti.ISBN')
             ->where('id_user', Auth()->id())
-            ->groupBy('copie.ISBN')
             ->get();
 
         return view('auth.profile.preferiti')
@@ -57,9 +57,9 @@ class ProfileController
 
         $prestiti = Libro::where('libri.ISBN', '>', 0)
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
-            ->whereNotNull('prestiti.data_restituzione')
-            ->where('user', Auth()->id())
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
+            ->whereNotNull('prestiti.data_fine')
+            ->where('id_user', Auth()->id())
             ->get();
 
         return view('auth.profile.index')
@@ -69,9 +69,9 @@ class ProfileController
 
     public function prenotati() {
 
-        $prestiti = Libro::where('libri.ISBN', '>', 0)
+        $prestiti = Libro::select(["*", "prenotazioni.created_at as created_at"])
             ->join('copie', 'copie.ISBN', 'libri.ISBN')
-            ->join('prenotazioni', 'copie.id_libro', 'prenotazioni.id_copia')
+            ->join('prenotazioni', 'copie.id_copia', 'prenotazioni.id_copia')
             ->where('user', Auth()->id())
             ->get();
 
@@ -85,7 +85,7 @@ class ProfileController
 
         $prestiti = Copia::where('copie.ISBN', '>', 0)
             ->join('libri', 'libri.ISBN', 'copie.ISBN')
-            ->join('prestiti', 'copie.id_libro', 'prestiti.libro')
+            ->join('prestiti', 'copie.id_copia', 'prestiti.id_copia')
             ->get();
 
         $headers = array(

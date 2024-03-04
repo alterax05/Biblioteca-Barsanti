@@ -20,7 +20,7 @@ Route::group(['throttle:30,1'], function () {
     Route::get('/condizioni', [App\Http\Controllers\ApiController::class, 'condizioni']);
     Route::get('/autori/{query}', [App\Http\Controllers\ApiController::class, 'autori']);
 
-    Route::get('search/{query}', [App\Http\Controllers\ApiController::class, 'search']);
+    Route::get('search/{query}', [App\Http\Controllers\ApiController::class, 'searchSuggestions']);
     Route::get('barcode/{libro_id}', [App\Http\Controllers\ApiController::class, 'barcode']);
 
     Route::post('recensioni', [App\Http\Controllers\ApiController::class, 'recensioni']);

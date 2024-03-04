@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="utf-8">
@@ -11,9 +11,10 @@
     <!-- Styles -->
     <link href="/imgs/favicon/favicon.ico" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link href="{{ URL::asset('/css/app.css') }}" rel="stylesheet">
+    
     @yield('style')
 
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>    <script src="https://kit.fontawesome.com/98ad9f355f.js" crossorigin="anonymous"></script>

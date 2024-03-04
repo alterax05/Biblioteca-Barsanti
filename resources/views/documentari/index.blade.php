@@ -6,7 +6,7 @@
 @section('video-content')
     <div class="cc-card" style="margin-bottom: 30px;background: #000;height: 550px;">
 
-        @if($documentario->id_tipologia == "1")
+        @if($documentario->id_fornitore == "1")
             <iframe style="width: 100%;height: 100%;" src="https://www.youtube.com/embed/{{ $documentario->embed }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         @else
             <video

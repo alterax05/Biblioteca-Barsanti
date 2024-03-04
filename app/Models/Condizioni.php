@@ -6,7 +6,11 @@ class Condizioni extends \Illuminate\Database\Eloquent\Model
 {
     protected $table = 'condizioni';
     protected $primaryKey = 'id_condizioni';
-
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    protected $keyType = 'tinyint';
+    protected $fillable = ['condizioni'];
+    public $timestamps = false;
+    protected $casts = [
+        'id_condizioni' => 'int',
+        'condizioni' => 'string'
+    ];
 }

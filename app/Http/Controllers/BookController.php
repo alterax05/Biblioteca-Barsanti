@@ -4,21 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Libro;
 use App\Models\Copia;
-use App\Models\Editore;
-use App\Models\Genere;
-use App\Models\Lingua;
-use App\Models\Preferiti;
-use App\Models\Reparto;
-use App\Models\Libri_Autori;
-use App\Models\Libri_Generi;
 use App\Models\Scheda_Autore;
 use App\Models\Autore;
-use App\Models\Condizioni;
-use App\Models\Prestito;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Nadar\Stemming\Stemm;
-use StopWords\StopWords;
 
 class BookController extends Controller
 {
@@ -28,8 +17,9 @@ class BookController extends Controller
             ->first();
         $copie = Copia::where('ISBN', $id_book)
             ->join('condizioni', 'condizioni.id_condizioni', 'copie.condizioni')
-            ->selectRaw('*,
-            (SELECT COUNT(*) FROM prestiti WHERE libro = copie.id_libro AND data_restituzione IS NULL) prestiti')
+            ->leftJoin('prestiti', 'prestiti.id_copia', 'copie.id_copia')
+            ->selectRaw('copie.*, condizioni.condizioni, (SELECT COUNT(*) FROM prestiti WHERE id_copia = copie.id_copia AND data_fine IS NULL) prestiti')
+            ->whereNull('prestiti.id_copia')
             ->get();
 
         $punteggio  = 0;
@@ -40,13 +30,14 @@ class BookController extends Controller
                 ->first();
         }
 
-        $autore = Libri_Autori::where('ISBN', $id_book)->first();
+
+        $autore = Libro::find($id_book)->belongsAutori()->first();
         $scheda = Scheda_Autore::where('id_autore', $autore->id_autore)->first();
 
         if($scheda != null)
-            $libri = Libri_Autori::where('libri_autori.id_autore', $autore->id_autore)
-                ->join('libri', 'libri.ISBN', 'libri_autori.ISBN')
-                ->orderByDesc('libri.anno_stampa')
+            $libri = Autore::find($autore->id_autore)
+                ->belongsLibri()
+                ->orderByDesc('anno_stampa')
                 ->limit(4)
                 ->get();
 

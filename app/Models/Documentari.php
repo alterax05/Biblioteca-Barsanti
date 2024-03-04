@@ -9,8 +9,7 @@ class Documentari extends Model
     protected $table = 'documentari';
     protected $primaryKey = 'id_documentario';
     protected $fillable = ['titolo', 'subtitolo', 'uploader', 'embed', 'tipologia', 'link', 'thumbnail', 'fornitore'];
-    const UPDATED_AT = null;
-    const CREATED_AT = null;
+    public $timestamps = false;
 
     public function belongsUser() {
         return $this->belongsTo(User::class, 'uploader');

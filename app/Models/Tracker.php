@@ -8,7 +8,7 @@ class Tracker Extends Model {
 
     public $attributes = ['hits' => 0];
 
-    protected $fillable = ['ip', 'date', 'user'];
+    protected $fillable = ['ip', 'visit_date', 'visit_time', 'user'];
 
     public $timestamps = false;
 
@@ -30,22 +30,18 @@ class Tracker Extends Model {
         } );
     }
 
-// Fill in the IP and today's date
+    // Fill in the IP and today's date
     public function scopeCurrent($query) {
         return $query->where('ip', $_SERVER['REMOTE_ADDR'])
-            ->where('date', date('Y-m-d'));
+            ->where('visit_date', date('Y-m-d'));
     }
 
     public static function hit() {
-        /* $test= request()->server('REMOTE_ADDR');
-         echo $test;
-         exit();*/
         static::firstOrCreate([
             'ip'   => $_SERVER['REMOTE_ADDR'],
-            'date' => date('Y-m-d'),
+            'visit_date' => date('Y-m-d'),
+            'visit_time' => date('H:i:s'),
             'user' => (Auth()->check())?Auth()->id():0
-            // exit()
         ])->save();
-
     }
 }

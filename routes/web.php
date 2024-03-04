@@ -106,3 +106,5 @@ Route::get('language/{locale}', function ($locale) {
     session()->put('locale', $locale);
     return redirect()->back();
 });
+
+Route::get('covers/{ISBN}', [App\Http\Controllers\ImageController::class, 'getCover']);

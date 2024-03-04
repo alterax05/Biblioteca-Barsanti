@@ -33,9 +33,10 @@ new Vue({
     update: function (event) {
       value = event.target.value;
 
+      let uri = encodeURI("/api/search/" + value);
       if (value != "") {
         axios
-          .get("/api/search/" + value.replace(" ", "-"))
+          .get(uri)
           .then((response) => {
             this.libri = response.data;
           })
@@ -92,26 +93,32 @@ new Vue({
       this.page = 1;
       $("#orderForm select").val(this.orderby);
 
+      let protocol = document.location.protocol;
+
       history.pushState(
         {},
         null,
         loadUrlParameters(
-          "https://" + document.location.host + "/search",
+          protocol+ "//" + document.location.host + "/search",
           "query",
           this.query
         )
       );
+
       this.loadBooks();
 
-      if (this.scheda_autore != null)
+      if (this.scheda_autore != null) {
         history.pushState(
           {},
           null,
-          "https://" +
+          protocol + "//" +
             document.location.host +
             "/search/autore/" +
             this.scheda_autore.id_autore
         );
+      }
+
+      this.libri = [];
     },
     loadBooks: function () {
       $("#loading").show();
@@ -173,12 +180,6 @@ new Vue({
     },
   },
 });
-
-function imgError(image) {
-  image.onerror = "";
-  image.src = "/imgs/notcover-min.png";
-  return true;
-}
 
 function loadUrlParameters(urlstring, param, value) {
   var url = new URL(urlstring);

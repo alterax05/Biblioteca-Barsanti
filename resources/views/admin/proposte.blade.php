@@ -6,7 +6,7 @@
             <div class="card" style="margin-bottom: 20px;">
                 <div class="libro row">
                     <div class="col-3">
-                        <img onerror="imgError(this)" src="https://www.ibs.it/images/{{$libro->ISBN}}_0_190_0_75.jpg" alt="cover">
+                        <img  src="/covers/{{$libro->ISBN}}" alt="cover">
                     </div>
                     <div class="col-9 row">
                         <div class="col-8">
@@ -14,7 +14,7 @@
                             <p>@if(count($libro->belongsAutori) != 0)
                                     {{ __('book.of') }}
                                     @foreach($libro->belongsAutori as $autore)
-                                        <a href="/search/autore/{{ $autore->belongsAutore->id_autore }}?page=1">{{ $autore->belongsAutore->autore }}</a>
+                                        <a href="/search/autore/{{ $autore->id_autore }}?page=1">{{ $autore->autore }}</a>
                                     @endforeach
                                 @endif
                             </p>
@@ -25,7 +25,7 @@
                                     <p>{{ __('book.generi') }}:</p>
                                     <div class="d-flex flex-column">
                                         @foreach($libro->belongsGeneri as $genere)
-                                            <a href="/search?genere={{ $genere->belongsGenere->id_genere }}&page=1">{{ $genere->belongsGenere->genere }}</a>
+                                            <a href="/search?genere={{ $genere->id_genere }}&page=1">{{ $genere->genere }}</a>
                                         @endforeach
                                     </div>
                                 </div>

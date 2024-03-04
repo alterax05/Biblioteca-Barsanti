@@ -12,7 +12,7 @@
                         <li>{{ __('home.cataloghi') }}</li>
                         @foreach($reparti as $reparto)
                             <a href="/search/sezione/{{$reparto->id_reparto}}">
-                                <li><i class="{{ $reparto->icon }}"></i> {{ __('categorie.' . $reparto->reparto) }} ({{ $reparto->numeri??0 }})</li>
+                                <li><i class="{{ $reparto->icon }}"></i> {{ __('categorie.' . $reparto->reparto) }} ({{ $reparto->numeri ?? 0 }})</li>
                             </a>
                         @endforeach
                     </ul>
@@ -55,7 +55,7 @@
                     <div class="autori-card cc-card">
 
                         <div class="autori-bacheca">
-                            <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.jpg">
+                            <img class="img-autori" src="/imgs/authors/{{ $autore->id_autore }}.webp">
                             <div>
                                 <p>{{ __('home.discover') }} {{ $autore->autore }} ({{ $autore->location }}) <a href="/search/autore/{{ $autore->id_autore }}">{{ __('home.more') }}</a></p>
                                 <label>{{ $autore->subtitle }}</label>
@@ -66,7 +66,7 @@
                             @foreach($autore->libri as $libro)
                             <div class="col-3">
                                 <a href="/book/{{ $libro->ISBN }}">
-                                    <img style="width: 100%;" onerror="imgError(this)" src="/imgs/covers/{{ $libro->ISBN }}.jpg">
+                                    <img style="width: 100%;"  src="/covers/{{ $libro->ISBN }}">
                                 </a>
                             </div>
                             @endforeach
